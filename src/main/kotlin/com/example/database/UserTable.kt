@@ -3,7 +3,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.ForeignKeyConstraint
 import org.jetbrains.exposed.sql.Table
 
-object UserTable : Table("User") {
+object UserTable : Table("user") {
     val id  = integer("id").autoIncrement()
     val userName = varchar("user_name",255)
     val phoneNumber = varchar("phone_number", 255).nullable()
