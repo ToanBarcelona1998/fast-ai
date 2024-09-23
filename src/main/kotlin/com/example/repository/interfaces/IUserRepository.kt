@@ -1,5 +1,7 @@
 package com.example.repository.interfaces
 
-interface IUserRepository : IBaseRepository{
+import com.example.domain.models.responds.User
+
+interface IUserRepository : IBaseRepository<User>{
 
 }

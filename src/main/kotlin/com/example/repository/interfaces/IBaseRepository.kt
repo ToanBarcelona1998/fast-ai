@@ -1,11 +1,11 @@
 package com.example.repository.interfaces
 
-interface IBaseRepository {
-    fun <T> add(param : T)
+interface IBaseRepository<T> {
+    suspend  fun add(entity : T) : T
 
-    fun <T> delete(id : T)
+    suspend  fun delete(id : Int) : Boolean
 
-    fun <T> update(param : T)
+    suspend  fun update(id : Int,entity : T) : Boolean
 
-    fun <T> get(id : Int) : T
+    suspend fun get(id : Int) : T?
 }
