@@ -5,6 +5,7 @@ val logbackVersion: String by project
 val exposedVersion: String by project
 val postgresqlVersion: String by project
 val hikariVersion: String by project
+val koinVersion : String by project
 
 
 plugins {
@@ -27,6 +28,8 @@ repositories {
 }
 
 dependencies {
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
     implementation("io.ktor:ktor-server-caching-headers-jvm")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-host-common-jvm")
