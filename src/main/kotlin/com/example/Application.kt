@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
 fun Application.module() {
     configureHTTP()
     configureMonitoring()
-    configureSecurity(UserService(UserRepository()))
+    configKoin()
+    configureSecurity()
     configureRouting()
 }
