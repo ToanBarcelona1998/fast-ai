@@ -1,7 +1,8 @@
 package com.example.domain.models
+import kotlinx.serialization.Serializable
 
-abstract  class BaseResponse<T>(code : Int , message: String , data: T)
+@Serializable
+data class BaseResponseSuccessful<T>(val message: String,val data: T , val code: Int = 200)
 
-final class BaseResponseSuccessful<T>(message: String, data: T) : BaseResponse<T>(200,message , data)
-
-final class BaseResponseError<T>(code : Int , message: String , data: T)
+@Serializable
+data class BaseResponseError<T>(val code : Int , val message: String , val data: T)
