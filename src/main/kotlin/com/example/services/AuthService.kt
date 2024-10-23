@@ -1,15 +1,29 @@
 package com.example.services
 
-final class AuthService {
-    fun login(email : String, password: String) {
+import com.example.application.config.JWTConfig
+import com.example.domain.exceptions.FastAiException
+import com.example.domain.models.responses.RegisterResponse
 
+final class AuthService(private val accountService: AccountService ,private val userService: UserService) {
+    suspend fun register(email : String?, password: String?) : RegisterResponse{
+        return try{
+            val account = accountService.createAccount(email,password)
+
+            val user = userService.createUser(email, accountId = account.id, gender = 0, address = null, birthday = null, phoneNumber = null, avatar = null)
+
+            val accessToken = JWTConfig.makeJWTToken(userId = user.id)
+
+            RegisterResponse(accessToken= accessToken)
+        }catch (e: FastAiException){
+            throw e
+        }
     }
 
-    fun register(email: String , password: String){
+    suspend fun login(email: String?, password: String?){
+        return try{
 
-    }
-
-    fun refreshToken(oldToken : String){
-
+        }catch (e: FastAiException){
+            throw e
+        }
     }
 }

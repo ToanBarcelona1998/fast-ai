@@ -1,45 +1,41 @@
 package com.example.application.plugins
 
-import com.example.application.config.JWTConfig
+import com.example.domain.models.BaseResponseError
+import com.example.routes.authRoutes
+import com.example.routes.test
+import com.example.routes.userRoutes
+import com.example.services.AuthService
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
     install(StatusPages) {
-        exception<Throwable> { call, cause ->
-            call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
+        status(HttpStatusCode.NotFound) { call , status ->
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "Not found" , data = null , code = status.value))
         }
+
+        status(HttpStatusCode.Unauthorized){ call , status ->
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "Unauthorized" , data = null , code = status.value))
+        }
+
+        status(HttpStatusCode.InternalServerError){ call , status ->
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "InternalServerError" , data = null , code = status.value))
+        }
+
     }
+
+    // Get service by injection
+    val authService : AuthService by inject()
+
     routing {
-        get("/login") {
-
-            try{
-                val token = JWTConfig.makeJWTToken(1)
-
-                call.respond(token)
-            }catch (e: Exception){
-                call.respond(mapOf("error" to e.message))
-            }
-        }
-
-        authenticate {
-            get("/") {
-                call.respond("Hello")
-            }
-        }
-
-
-        // Static plugin. Try to access `/static/index.html`
-        staticResources("/static" , null , null) {
-
-        }
+//        userRoutes()
+        authRoutes(authService)
+        test()
     }
-}
 
-data class Credentials(val email: String, val password: String)
+}
