@@ -4,7 +4,7 @@ import com.example.database.AccountTable
 import com.example.database.UserTable
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
-import com.example.domain.models.responds.User
+import com.example.domain.models.entity.User
 import com.example.repository.interfaces.IUserRepository
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -25,17 +25,16 @@ class UserRepository : IUserRepository {
                 it[address] = request.address
                 it[birthday] = request.birthday
                 it[phoneNumber] = request.phoneNumber
-            }
+            } get UserTable.id
 
             val createdAt = Clock.System.now().toString()
 
             User(
-                id = id.insertedCount,
+                id = id,
                 userName = request.userName,
                 gender = request.gender,
                 isActive = true,
                 updateAt = null,
-                email = request.email,
                 createAt = createdAt,
                 phoneNumber = request.phoneNumber,
                 accountId = request.accountId,
@@ -64,7 +63,6 @@ class UserRepository : IUserRepository {
                     User(
                         it[UserTable.id],
                         it[UserTable.userName],
-                        it[AccountTable.email],
                         it[UserTable.phoneNumber],
                         it[UserTable.gender],
                         it[UserTable.address],
@@ -78,15 +76,15 @@ class UserRepository : IUserRepository {
                 }.firstOrNull()
 
             UserTable.update({ UserTable.id eq id }) {
-                if(!request.userName.isNullOrEmpty()){
+                if (!request.userName.isNullOrEmpty()) {
                     it[userName] = request.userName
                 }
 
-                if(request.gender != null){
+                if (request.gender != null) {
                     it[gender] = request.gender
                 }
 
-                if(request.isActive != null){
+                if (request.isActive != null) {
                     it[isActive] = request.isActive
                 }
 
@@ -103,23 +101,21 @@ class UserRepository : IUserRepository {
 
     override suspend fun get(id: Int): User? {
         return transaction {
-            val user = AccountTable.innerJoin(UserTable)
-                .select((UserTable.accountId eq AccountTable.id) and (UserTable.id eq id)).map {
-                    User(
-                        it[UserTable.id],
-                        it[UserTable.userName],
-                        it[AccountTable.email],
-                        it[UserTable.phoneNumber],
-                        it[UserTable.gender],
-                        it[UserTable.address],
-                        it[UserTable.avatar],
-                        it[UserTable.birthday],
-                        it[UserTable.accountId],
-                        it[UserTable.updatedDate]?.toString(),
-                        it[UserTable.createdDate].toString(),
-                        it[UserTable.isActive],
-                    )
-                }.firstOrNull()
+            val user = UserTable.select(UserTable.id eq id).map {
+                User(
+                    it[UserTable.id],
+                    it[UserTable.userName],
+                    it[UserTable.phoneNumber],
+                    it[UserTable.gender],
+                    it[UserTable.address],
+                    it[UserTable.avatar],
+                    it[UserTable.birthday],
+                    it[UserTable.accountId],
+                    it[UserTable.updatedDate]?.toString(),
+                    it[UserTable.createdDate].toString(),
+                    it[UserTable.isActive],
+                )
+            }.firstOrNull()
 
             user
         }
