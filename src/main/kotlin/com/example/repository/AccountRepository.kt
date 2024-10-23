@@ -80,7 +80,6 @@ final class AccountRepository : IAccountRepository {
             account!!.copyWith(
                 email = request.email,
                 password = request.password,
-                createAt = null,
                 updateAt = updateAt.toString(),
             )
         }
