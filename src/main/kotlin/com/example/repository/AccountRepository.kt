@@ -4,7 +4,7 @@ import com.example.database.AccountTable
 import com.example.database.UserTable
 import com.example.domain.models.requests.AccountAddRequest
 import com.example.domain.models.requests.AccountUpdateRequest
-import com.example.domain.models.responds.Account
+import com.example.domain.models.entity.Account
 import com.example.repository.interfaces.IAccountRepository
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -15,17 +15,9 @@ import org.jetbrains.exposed.sql.update
 final class AccountRepository : IAccountRepository {
     override suspend fun existsByEmail(email: String): Boolean {
         return transaction {
-            val account = AccountTable.select(UserTable.userName eq email).limit(1).map {
-                Account(
-                    it[AccountTable.id],
-                    it[AccountTable.email],
-                    it[AccountTable.password],
-                    it[AccountTable.createdAt].toString(),
-                    it[AccountTable.updatedAt].toString(),
-                )
-            }.firstOrNull()
+            val row = AccountTable.select(AccountTable.email eq email).limit(1).firstOrNull()
 
-            account != null
+            row != null
         }
     }
 
@@ -38,9 +30,9 @@ final class AccountRepository : IAccountRepository {
                 it[email] = request.email
                 it[password] = request.password
                 it[createdAt] = createAt
-            }
+            } get AccountTable.id
 
-            Account(id = id.insertedCount, request.email, request.password , createAt.toString() , null)
+            Account(id = id, request.email, request.password , createAt.toString() , null)
         }
     }
 
