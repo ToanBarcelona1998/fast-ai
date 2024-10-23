@@ -3,7 +3,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object AccountTable : Table("accounts") {
+object AccountTable : Table("account") {
     val id = integer("id").autoIncrement()
     val email = varchar("email",255).uniqueIndex()
     val password = varchar("password" , 255)
