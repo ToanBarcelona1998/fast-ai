@@ -6,13 +6,13 @@ import org.jetbrains.exposed.sql.Database
 
 
 object DatabaseConfig {
-    private const val JDBC_URL = "jdbc:postgresql://"
+    private const val JDBC_URL = "jdbc:postgresql://localhost:5432/fastai"
     private const val DRIVER_CLASS_NAME = "org.postgresql.Driver"
 
     fun initDatabase(){
         val config = HikariConfig().apply {
             jdbcUrl = JDBC_URL
-            username = ""
+            username = "toannv"
             password = ""
             driverClassName = DRIVER_CLASS_NAME
         }
