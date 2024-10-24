@@ -5,6 +5,7 @@ import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
 import com.example.repository.interfaces.IUserRepository
+import com.example.utils.catchBlockService
 
 class UserService(private val userRepository: IUserRepository) {
     suspend fun createUser(
@@ -16,7 +17,7 @@ class UserService(private val userRepository: IUserRepository) {
         address: String?,
         birthday: String?,
     ): User {
-        return try {
+        return catchBlockService {
             if (userName.isNullOrEmpty()) {
                 throw FastAiException(
                     FastAiException.MISSING_USER_NAME_ERROR_CODE,
@@ -35,23 +36,15 @@ class UserService(private val userRepository: IUserRepository) {
             )
 
             userRepository.add(request)
-        } catch (e: Exception) {
-            throw FastAiException(FastAiException.DATABASE_ERROR_CODE, e.message!!)
-        } catch (e: FastAiException) {
-            throw e
         }
     }
 
     suspend fun getUserById(id: Int): User {
-        return try {
+        return catchBlockService {
             userRepository.get(id) ?: throw FastAiException(
                 FastAiException.USER_NOT_FOUND_ERROR_CODE,
                 FastAiException.USER_NOT_FOUND_ERROR_MESSAGE
             )
-        } catch (e: Exception) {
-            throw FastAiException(FastAiException.DATABASE_ERROR_CODE, e.message!!)
-        } catch (e: FastAiException) {
-            throw e
         }
     }
 
@@ -68,7 +61,7 @@ class UserService(private val userRepository: IUserRepository) {
         birthday: String?,
         isActive: Boolean?,
     ): User {
-        return try {
+        return catchBlockService {
             val request = UserUpdateRequest(
                 userName = userName,
                 gender = gender,
@@ -80,9 +73,15 @@ class UserService(private val userRepository: IUserRepository) {
             )
 
             userRepository.update(id, request)
-        } catch (e: Exception) {
+        }
+    }
 
-            throw FastAiException(FastAiException.DATABASE_ERROR_CODE, e.message!!)
+    suspend fun getUserByAccountId(id: Int): User {
+        return catchBlockService {
+            userRepository.getUserByAccountID(id) ?: throw FastAiException(
+                FastAiException.USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_CODE,
+                FastAiException.USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_MESSAGE
+            )
         }
     }
 }

@@ -14,30 +14,29 @@ data class User(
     val isActive : Boolean
 ){
     fun copyWith(
-        id: Int? = this.id,
-        userName: String = this.userName,
-        phoneNumber: String? = this.phoneNumber,
-        gender: Int = this.gender,
-        address: String? = this.address,
-        birthday: String? = this.birthday,
-        avatar: String? = this.avatar,
-        accountId: Int = this.accountId,
-        updateAt: String? = this.updateAt,
-        createAt: String = this.createAt,
-        isActive: Boolean = this.isActive
+        id: Int?,
+        userName: String?,
+        phoneNumber: String?,
+        gender: Int ?,
+        address: String?,
+        birthday: String?,
+        avatar: String?,
+        updateAt: String?,
+        createAt: String?,
+        isActive: Boolean?,
     ): User {
         return User(
             id = id ?: this.id,
-            userName = userName,
-            phoneNumber = phoneNumber,
-            gender = gender,
-            address = address,
-            birthday = birthday,
+            userName = userName ?: this.userName,
+            phoneNumber = phoneNumber ?: this.phoneNumber,
+            gender = gender ?: this.gender,
+            address = address ?: this.address,
+            birthday = birthday ?: this.birthday,
             avatar = avatar,
-            accountId = accountId,
-            updateAt = updateAt,
-            createAt = createAt,
-            isActive = isActive
+            accountId = this.accountId,
+            updateAt = updateAt ?: this.updateAt,
+            createAt = createAt ?: this.createAt,
+            isActive = isActive ?: this.isActive,
         )
     }
 }

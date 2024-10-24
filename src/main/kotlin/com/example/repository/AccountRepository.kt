@@ -1,23 +1,30 @@
 package com.example.repository
 
 import com.example.database.AccountTable
-import com.example.database.UserTable
 import com.example.domain.models.requests.AccountAddRequest
 import com.example.domain.models.requests.AccountUpdateRequest
 import com.example.domain.models.entity.Account
 import com.example.repository.interfaces.IAccountRepository
 import kotlinx.datetime.Clock
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 final class AccountRepository : IAccountRepository {
     override suspend fun existsByEmail(email: String): Boolean {
         return transaction {
-            val row = AccountTable.select(AccountTable.email eq email).limit(1).firstOrNull()
+            val row = AccountTable.select(column = AccountTable.email eq email).limit(1).firstOrNull()
 
             row != null
+        }
+    }
+
+    override suspend fun getAccountIDByEmailAndPassword(email: String, password: String): Int? {
+        return transaction {
+            AccountTable
+                .select(column = (AccountTable.email eq email) and (AccountTable.password eq password))
+                .limit(1)
+                .singleOrNull()?.get(AccountTable.id)
         }
     }
 
@@ -32,7 +39,7 @@ final class AccountRepository : IAccountRepository {
                 it[createdAt] = createAt
             } get AccountTable.id
 
-            Account(id = id, request.email, request.password , createAt.toString() , null)
+            Account(id = id, request.email, request.password, createAt.toString(), null)
         }
     }
 
@@ -47,7 +54,7 @@ final class AccountRepository : IAccountRepository {
 
             val updateAt = Clock.System.now()
 
-            val account = AccountTable.select(AccountTable.id eq id).limit(1).map {
+            val account = AccountTable.selectAll().where { AccountTable.id eq id }.limit(1).map {
                 Account(
                     it[AccountTable.id],
                     it[AccountTable.email],
@@ -79,7 +86,7 @@ final class AccountRepository : IAccountRepository {
 
     override suspend fun get(id: Int): Account? {
         return transaction {
-            AccountTable.select(AccountTable.id eq id).limit(1).map {
+            AccountTable.selectAll().where { AccountTable.id eq id }.limit(1).map {
                 Account(
                     it[AccountTable.id],
                     it[AccountTable.email],
