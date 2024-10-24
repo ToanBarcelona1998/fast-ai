@@ -5,55 +5,70 @@ import com.example.domain.models.requests.AccountAddRequest
 import com.example.domain.models.entity.Account
 import com.example.repository.interfaces.IAccountRepository
 import com.example.utils.catchBlockService
-import com.example.utils.hashedPassword
+import com.example.utils.hashPassword
 import com.example.utils.validateEmail
 
-final class AccountService(private val accountRepository: IAccountRepository){
-    suspend fun createAccount(email : String?, password: String?) : Account{
+final class AccountService(private val accountRepository: IAccountRepository) {
+    suspend fun createAccount(email: String?, password: String?): Account {
         return catchBlockService {
-            if(email.isNullOrEmpty()){
-                throw FastAiException(FastAiException.MISSING_EMAIL_ERROR_CODE, message = FastAiException.MISSING_EMAIL_ERROR_MESSAGE)
+            if (email.isNullOrEmpty()) {
+                throw FastAiException(
+                    FastAiException.MISSING_EMAIL_ERROR_CODE,
+                    message = FastAiException.MISSING_EMAIL_ERROR_MESSAGE
+                )
             }
 
-            if(password.isNullOrEmpty()){
-                throw FastAiException(FastAiException.MISSING_PASSWORD_ERROR_CODE, message = FastAiException.MISSING_PASSWORD_ERROR_MESSAGE)
+            if (password.isNullOrEmpty()) {
+                throw FastAiException(
+                    FastAiException.MISSING_PASSWORD_ERROR_CODE,
+                    message = FastAiException.MISSING_PASSWORD_ERROR_MESSAGE
+                )
             }
 
-            if(!validateEmail(email)){
-                throw FastAiException(FastAiException.EMAIL_INVALID_ERROR_CODE, message = FastAiException.EMAIL_INVALID_ERROR_MESSAGE)
+            if (!validateEmail(email)) {
+                throw FastAiException(
+                    FastAiException.EMAIL_INVALID_ERROR_CODE,
+                    message = FastAiException.EMAIL_INVALID_ERROR_MESSAGE
+                )
             }
 
-            val isExistsAccount = accountRepository.existsByEmail(email)
+            val isExistsAccount = accountRepository.getAccountByEmail(email) != null
 
-            if(isExistsAccount){
-                throw FastAiException(FastAiException.ACCOUNT_EXISTS_ERROR_CODE, message = FastAiException.ACCOUNT_EXISTS_ERROR_MESSAGE)
+            if (isExistsAccount) {
+                throw FastAiException(
+                    FastAiException.ACCOUNT_EXISTS_ERROR_CODE,
+                    message = FastAiException.ACCOUNT_EXISTS_ERROR_MESSAGE
+                )
             }
 
-            val hashedPassword = hashedPassword(password)
+            val hashedPassword = hashPassword(password)
 
-            val request = AccountAddRequest(email , hashedPassword)
+            val request = AccountAddRequest(email, hashedPassword)
 
             accountRepository.add(request)
         }
     }
 
-    suspend fun getAccountIDByEmailAndPassword(email: String?, password: String?) : Int{
+    suspend fun getAccountByEmail(email: String?): Account {
         return catchBlockService {
-            if(email.isNullOrEmpty()){
-                throw FastAiException(FastAiException.MISSING_EMAIL_ERROR_CODE, message = FastAiException.MISSING_EMAIL_ERROR_MESSAGE)
+            if (email.isNullOrEmpty()) {
+                throw FastAiException(
+                    FastAiException.MISSING_EMAIL_ERROR_CODE,
+                    message = FastAiException.MISSING_EMAIL_ERROR_MESSAGE
+                )
             }
 
-            if(password.isNullOrEmpty()){
-                throw FastAiException(FastAiException.MISSING_PASSWORD_ERROR_CODE, message = FastAiException.MISSING_PASSWORD_ERROR_MESSAGE)
+            if (!validateEmail(email)) {
+                throw FastAiException(
+                    FastAiException.EMAIL_INVALID_ERROR_CODE,
+                    message = FastAiException.EMAIL_INVALID_ERROR_MESSAGE
+                )
             }
 
-            if(!validateEmail(email)){
-                throw FastAiException(FastAiException.EMAIL_INVALID_ERROR_CODE, message = FastAiException.EMAIL_INVALID_ERROR_MESSAGE)
-            }
-
-            val id = accountRepository.getAccountIDByEmailAndPassword(email,password) ?: throw FastAiException(FastAiException.ACCOUNT_NOT_EXISTS_ERROR_CODE, message = FastAiException.ACCOUNT_NOT_EXISTS_ERROR_MESSAGE)
-
-            id
+            accountRepository.getAccountByEmail(email) ?: throw FastAiException(
+                FastAiException.ACCOUNT_NOT_EXISTS_ERROR_CODE,
+                message = FastAiException.ACCOUNT_NOT_EXISTS_ERROR_MESSAGE
+            )
         }
     }
 }

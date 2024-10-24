@@ -50,4 +50,5 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("org.mindrot:jbcrypt:0.4")
 }
