@@ -5,6 +5,7 @@ import com.example.routes.authRoutes
 import com.example.routes.test
 import com.example.routes.userRoutes
 import com.example.services.AuthService
+import com.example.services.UserService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -32,8 +33,10 @@ fun Application.configureRouting() {
     // Get service by injection
     val authService : AuthService by inject()
 
+    val userService : UserService by inject()
+
     routing {
-//        userRoutes()
+        userRoutes(userService)
         authRoutes(authService)
         test()
     }

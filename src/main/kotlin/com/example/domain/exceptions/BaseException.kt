@@ -24,11 +24,13 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MISSING_USER_NAME_ERROR_CODE = 1010
         val USER_NOT_FOUND_ERROR_CODE = 1011
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_CODE = 1012
+        val GET_USER_MISSING_USER_ID_ERROR_CODE = 1013
 
         // User error message
         val MISSING_USER_NAME_ERROR_MESSAGE = "Missing user name"
         val USER_NOT_FOUND_ERROR_MESSAGE = "User not found"
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_MESSAGE = "User not found"
+        val GET_USER_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
 
 
         // Common error code

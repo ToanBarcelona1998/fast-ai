@@ -4,6 +4,7 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
+import com.example.domain.models.responses.GetUserResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
@@ -39,12 +40,22 @@ class UserService(private val userRepository: IUserRepository) {
         }
     }
 
-    suspend fun getUserById(id: Int): User {
+    suspend fun getUserById(id: Int?): GetUserResponse {
         return catchBlockService {
-            userRepository.get(id) ?: throw FastAiException(
+
+            if (id == null) {
+                throw FastAiException(
+                    FastAiException.GET_USER_MISSING_USER_ID_ERROR_CODE,
+                    message = FastAiException.GET_USER_MISSING_USER_ID_ERROR_MESSAGE
+                )
+            }
+
+            val user = userRepository.get(id) ?: throw FastAiException(
                 FastAiException.USER_NOT_FOUND_ERROR_CODE,
                 FastAiException.USER_NOT_FOUND_ERROR_MESSAGE
             )
+
+            GetUserResponse(user)
         }
     }
 
