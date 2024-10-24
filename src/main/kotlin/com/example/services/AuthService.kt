@@ -5,6 +5,7 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.responses.LoginResponse
 import com.example.domain.models.responses.RegisterResponse
 import com.example.utils.catchBlockService
+import com.example.utils.verifyPassword
 
 final class AuthService(private val accountService: AccountService ,private val userService: UserService) {
     suspend fun register(email : String?, password: String?) : RegisterResponse{
@@ -21,9 +22,17 @@ final class AuthService(private val accountService: AccountService ,private val 
 
     suspend fun login(email: String?, password: String?) : LoginResponse{
         return catchBlockService {
-            val id = accountService.getAccountIDByEmailAndPassword(email,password)
+            val account = accountService.getAccountByEmail(email)
 
-            val user = userService.getUserById(id)
+            if(password.isNullOrEmpty()){
+                throw FastAiException(FastAiException.MISSING_PASSWORD_ERROR_CODE , message = FastAiException.MISSING_PASSWORD_ERROR_MESSAGE)
+            }
+
+            if (!verifyPassword(password,account.password)){
+                throw FastAiException(FastAiException.INCORRECT_PASSWORD_ERROR_CODE , message = FastAiException.INCORRECT_PASSWORD_ERROR_MESSAGE)
+            }
+
+            val user = userService.getUserByAccountId(account.id)
 
             val accessToken = JWTConfig.makeJWTToken(user.id)
 

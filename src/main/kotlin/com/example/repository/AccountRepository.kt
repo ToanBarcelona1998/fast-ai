@@ -11,20 +11,18 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 final class AccountRepository : IAccountRepository {
-    override suspend fun existsByEmail(email: String): Boolean {
-        return transaction {
-            val row = AccountTable.select(column = AccountTable.email eq email).limit(1).firstOrNull()
 
-            row != null
-        }
-    }
-
-    override suspend fun getAccountIDByEmailAndPassword(email: String, password: String): Int? {
+    override suspend fun getAccountByEmail(email: String): Account? {
         return transaction {
-            AccountTable
-                .select(column = (AccountTable.email eq email) and (AccountTable.password eq password))
-                .limit(1)
-                .singleOrNull()?.get(AccountTable.id)
+            AccountTable.selectAll().where { AccountTable.email eq email }.limit(1).map {
+                Account(
+                    it[AccountTable.id],
+                    it[AccountTable.email],
+                    it[AccountTable.password],
+                    it[AccountTable.createdAt].toString(),
+                    it[AccountTable.updatedAt]?.toString(),
+                )
+            }.firstOrNull()
         }
     }
 

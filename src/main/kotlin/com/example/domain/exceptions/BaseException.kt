@@ -10,6 +10,7 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val EMAIL_INVALID_ERROR_CODE = 1002
         val ACCOUNT_EXISTS_ERROR_CODE = 1003
         val ACCOUNT_NOT_EXISTS_ERROR_CODE = 1004
+        val INCORRECT_PASSWORD_ERROR_CODE = 1005
 
         // Auth error message
         val MISSING_EMAIL_ERROR_MESSAGE = "Missing email"
@@ -17,6 +18,7 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val EMAIL_INVALID_ERROR_MESSAGE = "Email is invalid"
         val ACCOUNT_EXISTS_ERROR_MESSAGE = "Account is exists"
         val ACCOUNT_NOT_EXISTS_ERROR_MESSAGE = "Account is not exists"
+        val INCORRECT_PASSWORD_ERROR_MESSAGE = "Password is not correct"
 
         // User error code from 1010 -
         val MISSING_USER_NAME_ERROR_CODE = 1010
