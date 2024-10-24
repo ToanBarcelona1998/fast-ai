@@ -1,19 +1,39 @@
 package com.example.repository
 
-import com.example.database.AccountTable
 import com.example.database.UserTable
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
 import com.example.repository.interfaces.IUserRepository
 import kotlinx.datetime.Clock
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 class UserRepository : IUserRepository {
+    override suspend fun getUserByAccountID(id: Int): User? {
+        return transaction {
+            val user = UserTable.selectAll().where { UserTable.accountId eq id }.limit(1).map {
+                User(
+                    it[UserTable.id],
+                    it[UserTable.userName],
+                    it[UserTable.phoneNumber],
+                    it[UserTable.gender],
+                    it[UserTable.address],
+                    it[UserTable.avatar],
+                    it[UserTable.birthday],
+                    it[UserTable.accountId],
+                    it[UserTable.updatedDate]?.toString(),
+                    it[UserTable.createdDate].toString(),
+                    it[UserTable.isActive],
+                )
+            }.firstOrNull()
+
+            user
+        }
+    }
+
     override suspend fun add(request: UserAddRequest): User {
         return transaction {
             val id = UserTable.insert {
@@ -58,22 +78,23 @@ class UserRepository : IUserRepository {
     override suspend fun update(id: Int, request: UserUpdateRequest): User {
         return transaction {
 
-            val user = AccountTable.innerJoin(UserTable)
-                .select((UserTable.accountId eq AccountTable.id) and (UserTable.id eq id)).map {
-                    User(
-                        it[UserTable.id],
-                        it[UserTable.userName],
-                        it[UserTable.phoneNumber],
-                        it[UserTable.gender],
-                        it[UserTable.address],
-                        it[UserTable.avatar],
-                        it[UserTable.birthday],
-                        it[UserTable.accountId],
-                        it[UserTable.updatedDate]?.toString(),
-                        it[UserTable.createdDate].toString(),
-                        it[UserTable.isActive],
-                    )
-                }.firstOrNull()
+            val user = UserTable.selectAll().where { UserTable.id eq id }.limit(1).map {
+                User(
+                    it[UserTable.id],
+                    it[UserTable.userName],
+                    it[UserTable.phoneNumber],
+                    it[UserTable.gender],
+                    it[UserTable.address],
+                    it[UserTable.avatar],
+                    it[UserTable.birthday],
+                    it[UserTable.accountId],
+                    it[UserTable.updatedDate]?.toString(),
+                    it[UserTable.createdDate].toString(),
+                    it[UserTable.isActive],
+                )
+            }.firstOrNull()
+
+            val updateAt = Clock.System.now()
 
             UserTable.update({ UserTable.id eq id }) {
                 if (!request.userName.isNullOrEmpty()) {
@@ -88,6 +109,7 @@ class UserRepository : IUserRepository {
                     it[isActive] = request.isActive
                 }
 
+                it[updatedDate] = updateAt
                 it[avatar] = request.avatar
                 it[avatar] = request.avatar
                 it[address] = request.address
@@ -95,13 +117,24 @@ class UserRepository : IUserRepository {
                 it[phoneNumber] = request.phoneNumber
             }
 
-            user!!.copyWith()
+            user!!.copyWith(
+                avatar = request.avatar,
+                address = request.address,
+                updateAt = updateAt.toString(),
+                userName = request.userName,
+                gender = request.gender,
+                isActive = request.isActive,
+                birthday = request.birthday,
+                createAt = null,
+                phoneNumber = request.phoneNumber,
+                id = null
+            )
         }
     }
 
     override suspend fun get(id: Int): User? {
         return transaction {
-            val user = UserTable.select(UserTable.id eq id).map {
+            val user = UserTable.selectAll().where { UserTable.id eq id }.limit(1).map {
                 User(
                     it[UserTable.id],
                     it[UserTable.userName],

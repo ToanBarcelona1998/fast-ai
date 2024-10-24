@@ -6,5 +6,5 @@ import com.example.domain.models.entity.User
 
 interface IUserRepository : IAddRepository<User, UserAddRequest>, IUpdateRepository<User, UserUpdateRequest, Int>,
     IDeleteRepository<Int>, IGetRepository<User, Int> {
-
+        suspend fun getUserByAccountID(id : Int) : User?
 }
