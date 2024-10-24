@@ -31,8 +31,8 @@ Fastai is a Kotlin-based backend server built using Ktor. It serves as the backe
    ```
 
 2.	Set up your PostgreSQL database:
-      •	Create a new database for the Fastai project.
-      •	Update the database connection settings in your application configuration file.
+- Create a new database for the Fastai project.
+- Update the database connection settings in your application configuration file.
 
 3.	Build the project:
       ```bash
@@ -53,7 +53,7 @@ Refer to the API Documentation for detailed information on the available endpoin
 
 ### Contributing
 
-- Contributions are welcome! If you have suggestions for improvements or want to report a bug, please open an issue or submit a pull request.
+Contributions are welcome! If you have suggestions for improvements or want to report a bug, please open an issue or submit a pull request.
 
 ### License
 
