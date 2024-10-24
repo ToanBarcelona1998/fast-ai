@@ -5,8 +5,9 @@ import com.example.services.UserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import org.koin.ktor.ext.inject
 
-fun Application.configureSecurity(userService: UserService) {
+fun Application.configureSecurity() {
     install(Authentication){
         jwt {
             realm = "ktor.io"
@@ -14,15 +15,18 @@ fun Application.configureSecurity(userService: UserService) {
             validate { jwtCredential ->
                 val id = jwtCredential.payload.getClaim("id").asInt()
 
-                if(id != null){
-                    val user = userService.getUser(id)
+                val userService by inject<UserService>()
 
-                    if (user != null){
-                        JWTPrincipal(jwtCredential.payload)
+                if(id != null){
+                    try{
+                        userService.getUserById(id)
+                        return@validate JWTPrincipal(jwtCredential.payload)
+                    }catch (e : Exception){
+                        return@validate null
                     }
                 }
 
-                null
+                return@validate null
             }
         }
     }
