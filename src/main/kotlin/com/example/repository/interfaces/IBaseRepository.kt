@@ -15,3 +15,9 @@ interface IDeleteRepository<ID>{
 interface IGetRepository<T,ID> {
     suspend fun get(id : ID) : T?
 }
+
+interface IGetListRepository<T,R> {
+    suspend fun getAll() : List<T>
+
+    suspend fun getAll(request: R) : List<T>
+}
