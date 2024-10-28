@@ -57,7 +57,7 @@ class UserService(private val userRepository: IUserRepository) {
                 FastAiException.USER_NOT_FOUND_ERROR_MESSAGE
             )
 
-            GetUserResponse(user)
+            GetUserResponse(user.checkStatus())
         }
     }
 
@@ -91,10 +91,12 @@ class UserService(private val userRepository: IUserRepository) {
 
     suspend fun getUserByAccountId(id: Int): User {
         return catchBlockService {
-            userRepository.getUserByAccountID(id) ?: throw FastAiException(
+            val user = userRepository.getUserByAccountID(id) ?: throw FastAiException(
                 FastAiException.USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_CODE,
                 FastAiException.USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_MESSAGE
             )
+
+            user.checkStatus()
         }
     }
 }
