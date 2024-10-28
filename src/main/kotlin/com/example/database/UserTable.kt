@@ -2,7 +2,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object UserTable : Table("user") {
+object UserTable : Table("users") {
     val id  = integer("id").autoIncrement()
     val userName = varchar("user_name",100)
     val phoneNumber = varchar("phone_number", 15).nullable()
