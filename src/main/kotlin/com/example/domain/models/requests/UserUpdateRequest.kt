@@ -7,5 +7,5 @@ data class UserUpdateRequest(
     val address: String?,
     val birthday : String?,
     val avatar : String?,
-    val isActive : Boolean?
+    val status : Int?
 )

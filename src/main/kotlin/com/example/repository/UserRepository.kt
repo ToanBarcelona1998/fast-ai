@@ -24,9 +24,9 @@ class UserRepository : IUserRepository {
                     it[UserTable.avatar],
                     it[UserTable.birthday],
                     it[UserTable.accountId],
-                    it[UserTable.updatedDate]?.toString(),
-                    it[UserTable.createdDate].toString(),
-                    it[UserTable.isActive],
+                    it[UserTable.updatedAt]?.toString(),
+                    it[UserTable.createdAt].toString(),
+                    it[UserTable.status],
                 )
             }.firstOrNull()
 
@@ -39,7 +39,7 @@ class UserRepository : IUserRepository {
             val id = UserTable.insert {
                 it[userName] = request.userName
                 it[gender] = request.gender
-                it[isActive] = true
+                it[status] = request.status
                 it[accountId] = request.accountId
                 it[avatar] = request.avatar
                 it[address] = request.address
@@ -53,7 +53,7 @@ class UserRepository : IUserRepository {
                 id = id,
                 userName = request.userName,
                 gender = request.gender,
-                isActive = true,
+                status = request.status,
                 updateAt = null,
                 createAt = createdAt,
                 phoneNumber = request.phoneNumber,
@@ -68,7 +68,7 @@ class UserRepository : IUserRepository {
     override suspend fun delete(id: Int): Boolean {
         return transaction {
             UserTable.update({ UserTable.id eq id }) {
-                it[isActive] = false
+                it[status] = 3
             }
 
             true
@@ -88,9 +88,9 @@ class UserRepository : IUserRepository {
                     it[UserTable.avatar],
                     it[UserTable.birthday],
                     it[UserTable.accountId],
-                    it[UserTable.updatedDate]?.toString(),
-                    it[UserTable.createdDate].toString(),
-                    it[UserTable.isActive],
+                    it[UserTable.updatedAt]?.toString(),
+                    it[UserTable.createdAt].toString(),
+                    it[UserTable.status],
                 )
             }.firstOrNull()
 
@@ -105,11 +105,11 @@ class UserRepository : IUserRepository {
                     it[gender] = request.gender
                 }
 
-                if (request.isActive != null) {
-                    it[isActive] = request.isActive
+                if (request.status != null) {
+                    it[status] = request.status
                 }
 
-                it[updatedDate] = updateAt
+                it[updatedAt] = updateAt
                 it[avatar] = request.avatar
                 it[avatar] = request.avatar
                 it[address] = request.address
@@ -123,7 +123,7 @@ class UserRepository : IUserRepository {
                 updateAt = updateAt.toString(),
                 userName = request.userName,
                 gender = request.gender,
-                isActive = request.isActive,
+                status = request.status,
                 birthday = request.birthday,
                 createAt = null,
                 phoneNumber = request.phoneNumber,
@@ -144,9 +144,9 @@ class UserRepository : IUserRepository {
                     it[UserTable.avatar],
                     it[UserTable.birthday],
                     it[UserTable.accountId],
-                    it[UserTable.updatedDate]?.toString(),
-                    it[UserTable.createdDate].toString(),
-                    it[UserTable.isActive],
+                    it[UserTable.updatedAt]?.toString(),
+                    it[UserTable.createdAt].toString(),
+                    it[UserTable.status],
                 )
             }.firstOrNull()
 

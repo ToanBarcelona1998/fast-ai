@@ -17,6 +17,7 @@ class UserService(private val userRepository: IUserRepository) {
         avatar: String?,
         address: String?,
         birthday: String?,
+        status: Int,
     ): User {
         return catchBlockService {
             if (userName.isNullOrEmpty()) {
@@ -33,7 +34,8 @@ class UserService(private val userRepository: IUserRepository) {
                 accountId = accountId,
                 avatar = avatar,
                 address = address,
-                birthday = birthday
+                birthday = birthday,
+                status = status
             )
 
             userRepository.add(request)
@@ -70,7 +72,7 @@ class UserService(private val userRepository: IUserRepository) {
         avatar: String?,
         address: String?,
         birthday: String?,
-        isActive: Boolean?,
+        status: Int?,
     ): User {
         return catchBlockService {
             val request = UserUpdateRequest(
@@ -80,7 +82,7 @@ class UserService(private val userRepository: IUserRepository) {
                 avatar = avatar,
                 address = address,
                 birthday = birthday,
-                isActive = isActive,
+                status = status,
             )
 
             userRepository.update(id, request)

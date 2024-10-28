@@ -8,4 +8,5 @@ data class UserAddRequest(
     val birthday: String?,
     val avatar: String?,
     val accountId: Int,
+    val status: Int,
 )

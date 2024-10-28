@@ -12,7 +12,7 @@ final class AuthService(private val accountService: AccountService ,private val 
         return catchBlockService {
             val account = accountService.createAccount(email,password)
 
-            val user = userService.createUser(email, accountId = account.id, gender = 0, address = null, birthday = null, phoneNumber = null, avatar = null)
+            val user = userService.createUser(email, accountId = account.id, gender = 0, address = null, birthday = null, phoneNumber = null, avatar = null, status = 0)
 
             val accessToken = JWTConfig.makeJWTToken(userId = user.id)
 
