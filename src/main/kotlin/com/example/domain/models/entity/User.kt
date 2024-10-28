@@ -1,26 +1,27 @@
 package com.example.domain.models.entity
 
+import com.example.domain.exceptions.FastAiException
 import kotlinx.serialization.*
 
 @Serializable
 data class User(
     val id: Int,
     val userName: String,
-    val phoneNumber : String?,
-    val gender : Int,
+    val phoneNumber: String?,
+    val gender: Int,
     val address: String?,
-    val birthday : String?,
-    val avatar : String?,
-    val accountId : Int,
-    val updateAt : String?,
-    val createAt : String,
-    val status : Int
-){
+    val birthday: String?,
+    val avatar: String?,
+    val accountId: Int,
+    val updateAt: String?,
+    val createAt: String,
+    val status: Int
+) {
     fun copyWith(
         id: Int?,
         userName: String?,
         phoneNumber: String?,
-        gender: Int ?,
+        gender: Int?,
         address: String?,
         birthday: String?,
         avatar: String?,
@@ -41,5 +42,26 @@ data class User(
             createAt = createAt ?: this.createAt,
             status = status ?: this.status,
         )
+    }
+
+    fun checkStatus(): User {
+
+        when (status) {
+            0 -> {
+                throw FastAiException(FastAiException.USER_ON_BOARDING_STATUS_ERROR_CODE,FastAiException.USER_ON_BOARDING_STATUS_ERROR_MESSAGE)
+            }
+
+            2 -> {
+                throw FastAiException(FastAiException.USER_ON_BLOCKING_STATUS_ERROR_CODE,FastAiException.USER_ON_BLOCKING_STATUS_ERROR_MESSAGE)
+            }
+
+            3 -> {
+                throw FastAiException(FastAiException.USER_ON_DELETING_STATUS_ERROR_CODE,FastAiException.USER_ON_DELETING_STATUS_ERROR_MESSAGE)
+            }
+
+            else -> {
+                return this
+            }
+        }
     }
 }
