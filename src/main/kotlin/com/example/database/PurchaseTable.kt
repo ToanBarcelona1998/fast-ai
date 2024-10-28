@@ -3,7 +3,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object PurchaseTable : Table("purchase") {
+object PurchaseTable : Table("purchases") {
     val id = integer("id").autoIncrement()
     val userId = reference("user_id",UserTable.id)
     val status = varchar("status", 50).default("pending") // pending , completed , failed

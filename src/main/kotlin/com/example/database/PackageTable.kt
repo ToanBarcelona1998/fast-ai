@@ -3,7 +3,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object PackageTable : Table("package") {
+object PackageTable : Table("packages") {
     val id = integer("id").autoIncrement()
     val name = varchar("name", 255)
     val credits = integer("credits")
