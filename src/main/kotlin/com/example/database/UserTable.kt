@@ -11,9 +11,9 @@ object UserTable : Table("user") {
     val birthday = varchar("birthday" , length = 100).nullable()
     val avatar = varchar("avatar" , length = 255).nullable()
     val accountId = reference("account_id", AccountTable.id)
-    val createdDate = timestamp("created_at")
-    val isActive = bool("is_active")
-    val updatedDate = timestamp("updated_at").nullable()
+    val createdAt = timestamp("created_at")
+    val status = integer("status").default(0) // 0 : waiting update. 1 : active. 2 : locked. 3 : deleted
+    val updatedAt = timestamp("updated_at").nullable()
 
     override val primaryKey = PrimaryKey(id)
 }

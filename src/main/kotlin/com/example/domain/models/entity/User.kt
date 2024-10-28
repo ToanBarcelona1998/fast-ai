@@ -14,7 +14,7 @@ data class User(
     val accountId : Int,
     val updateAt : String?,
     val createAt : String,
-    val isActive : Boolean
+    val status : Int
 ){
     fun copyWith(
         id: Int?,
@@ -26,7 +26,7 @@ data class User(
         avatar: String?,
         updateAt: String?,
         createAt: String?,
-        isActive: Boolean?,
+        status: Int?,
     ): User {
         return User(
             id = id ?: this.id,
@@ -39,7 +39,7 @@ data class User(
             accountId = this.accountId,
             updateAt = updateAt ?: this.updateAt,
             createAt = createAt ?: this.createAt,
-            isActive = isActive ?: this.isActive,
+            status = status ?: this.status,
         )
     }
 }
