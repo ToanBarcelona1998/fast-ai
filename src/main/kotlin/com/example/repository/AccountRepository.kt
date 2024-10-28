@@ -7,7 +7,6 @@ import com.example.domain.models.entity.Account
 import com.example.repository.interfaces.IAccountRepository
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 final class AccountRepository : IAccountRepository {
@@ -63,9 +62,6 @@ final class AccountRepository : IAccountRepository {
             }.firstOrNull()
 
             AccountTable.update({ AccountTable.id eq id }) {
-                if (!request.email.isNullOrEmpty()) {
-                    it[email] = request.email
-                }
 
                 if (!request.password.isNullOrEmpty()) {
                     it[password] = request.password
@@ -75,7 +71,6 @@ final class AccountRepository : IAccountRepository {
             }
 
             account!!.copyWith(
-                email = request.email,
                 password = request.password,
                 updateAt = updateAt.toString(),
             )
