@@ -7,7 +7,4 @@ data class PackageAddRequest(
     val credits: Int,
     val description: String?,
     val basePrice: BigDecimal,
-    val promoPrice: BigDecimal?,
-    val promoEndTime: String?,
-    val updatedAt: String?,
 )
