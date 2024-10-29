@@ -4,8 +4,8 @@ interface IAddRepository<T ,R> {
     suspend  fun add(request : R) : T
 }
 
-interface  IUpdateRepository<T,R,ID>{
-    suspend  fun update(id : ID,request : R) : T
+interface  IUpdateRepository<R,ID>{
+    suspend  fun update(id : ID,request : R) : Boolean
 }
 
 interface IDeleteRepository<ID>{
