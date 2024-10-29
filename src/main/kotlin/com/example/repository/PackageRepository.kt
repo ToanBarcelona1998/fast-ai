@@ -7,6 +7,7 @@ import com.example.domain.models.requests.PackageGetAllRequest
 import com.example.repository.interfaces.IPackageRepository
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -60,5 +61,24 @@ final class PackageRepository : IPackageRepository {
 
     override suspend fun getAll(request: PackageGetAllRequest): List<Package> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun get(id: Int): Package? {
+        return transaction {
+            PackageTable.selectAll().where(PackageTable.id eq id).limit(1).map {
+                Package(
+                    id = it[PackageTable.id],
+                    name = it[PackageTable.name],
+                    credits = it[PackageTable.credits],
+                    description = it[PackageTable.description],
+                    basePrice = it[PackageTable.basePrice],
+                    promoPrice = it[PackageTable.promoPrice],
+                    isActive = it[PackageTable.isActive],
+                    createdAt = it[PackageTable.createdAt].toString(),
+                    updatedAt = it[PackageTable.updatedAt]?.toString(),
+                    promoEndTime = it[PackageTable.promoEndTime]?.toString(),
+                )
+            }.firstOrNull()
+        }
     }
 }
