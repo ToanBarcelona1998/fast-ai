@@ -1,6 +1,5 @@
 package com.example.routes
 
-import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.BaseResponseSuccessful
 import com.example.services.AuthService
 import com.example.utils.parseErrorToRespond
@@ -21,7 +20,7 @@ fun Route.authRoutes(authService: AuthService){
             try{
                 val loginResponse = authService.login(email = userName!! , password = password!!)
 
-                call.respond(HttpStatusCode.OK , BaseResponseSuccessful(data = loginResponse , message = FastAiException.SUCCESSFUL_MESSAGE))
+                call.respond(HttpStatusCode.OK , BaseResponseSuccessful(data = loginResponse))
             }catch (e : Exception){
                 parseErrorToRespond(e,call)
             }
@@ -36,7 +35,7 @@ fun Route.authRoutes(authService: AuthService){
             try{
                 val registerResponse = authService.register(email = userName , password = password)
 
-                call.respond(HttpStatusCode.OK , BaseResponseSuccessful(data = registerResponse , message = FastAiException.SUCCESSFUL_MESSAGE))
+                call.respond(HttpStatusCode.OK , BaseResponseSuccessful(data = registerResponse))
             }catch (e: Exception){
                 parseErrorToRespond(e,call)
             }
