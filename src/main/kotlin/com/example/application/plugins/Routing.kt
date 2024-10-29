@@ -14,15 +14,15 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
     install(StatusPages) {
         status(HttpStatusCode.NotFound) { call , status ->
-            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "Not found" , data = null , code = status.value))
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = HttpStatusCode.NotFound.description , data = null , code = status.value))
         }
 
         status(HttpStatusCode.Unauthorized){ call , status ->
-            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "Unauthorized" , data = null , code = status.value))
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = HttpStatusCode.Unauthorized.description , data = null , code = status.value))
         }
 
         status(HttpStatusCode.InternalServerError){ call , status ->
-            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = "InternalServerError" , data = null , code = status.value))
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = HttpStatusCode.InternalServerError.description , data = null , code = status.value))
         }
 
     }
