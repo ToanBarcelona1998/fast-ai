@@ -6,3 +6,9 @@ fun validateEmail(email : String) : Boolean{
     )
     return emailRegex.matches(email)
 }
+
+fun validatePurchaseStatus(status: String) : Boolean{
+    val allowStatus = listOf("pending","completed" , "failed")
+
+    return allowStatus.contains(status)
+}
