@@ -18,9 +18,9 @@ fun Route.authRoutes(authService: AuthService){
             try{
                 val loginResponse = authService.login(email = userName!! , password = password!!)
 
-                parseDataToRespond(loginResponse,call)
+                call.parseDataToRespond(loginResponse)
             }catch (e : Exception){
-                parseErrorToRespond(e,call)
+                call.parseErrorToRespond(e)
             }
         }
 
@@ -33,9 +33,9 @@ fun Route.authRoutes(authService: AuthService){
             try{
                 val registerResponse = authService.register(email = userName , password = password)
 
-                parseDataToRespond(registerResponse,call)
+                call.parseDataToRespond(registerResponse)
             }catch (e: Exception){
-                parseErrorToRespond(e,call)
+                call.parseErrorToRespond(e)
             }
         }
     }

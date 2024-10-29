@@ -15,9 +15,9 @@ fun Route.packageRoutes(packageService: PackageService){
                 try{
                     val getAllPackagesResponse = packageService.getAll()
 
-                    parseDataToRespond(getAllPackagesResponse,call)
+                    call.parseDataToRespond(getAllPackagesResponse)
                 }catch (e : Exception){
-                    parseErrorToRespond(e,call)
+                    call.parseErrorToRespond(e)
                 }
             }
 
@@ -33,9 +33,9 @@ fun Route.packageRoutes(packageService: PackageService){
 
                     val status = packageService.add(name = name , description = description, basePrice = BigDecimal(basePrice))
 
-                    parseDataToRespond(status,call)
+                    call.parseDataToRespond(status)
                 }catch (e : Exception){
-                    parseErrorToRespond(e,call)
+                    call.parseErrorToRespond(e)
                 }
             }
         }

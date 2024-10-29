@@ -1,6 +1,5 @@
 package com.example.routes
 
-import com.example.domain.models.BaseResponseSuccessful
 import com.example.services.UserCreditService
 import com.example.services.UserService
 import com.example.utils.claimId
@@ -15,19 +14,19 @@ fun Route.userRoutes(userService: UserService , userCreditService: UserCreditSer
         authenticate {
             get {
                 try {
-                    val id = claimId(call)
+                    val id = call.claimId()
 
                     val response = userService.getUserById(id)
 
-                    parseDataToRespond(response,call)
+                    call.parseDataToRespond(response)
                 } catch (e: Exception) {
-                    parseErrorToRespond(e, call)
+                    call.parseErrorToRespond(e)
                 }
             }
 
             put {
                 try {
-                    val id = claimId(call)
+                    val id = call.claimId()
 
                     val formData = call.receiveParameters()
 
@@ -51,19 +50,19 @@ fun Route.userRoutes(userService: UserService , userCreditService: UserCreditSer
                     )
 
                 } catch (e: Exception) {
-                    parseErrorToRespond(e, call)
+                    call.parseErrorToRespond(e)
                 }
             }
 
             get("/credit") {
                 try{
-                    val id = claimId(call)
+                    val id = call.claimId()
 
                     val response = userCreditService.getUserCredit(id)
 
-                    parseDataToRespond(response,call)
+                    call.parseDataToRespond(response)
                 }catch (e: Exception){
-                    parseErrorToRespond(e,call)
+                    call.parseErrorToRespond(e)
                 }
             }
         }
