@@ -24,7 +24,7 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MISSING_USER_NAME_ERROR_CODE = 1010
         val USER_NOT_FOUND_ERROR_CODE = 1011
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_CODE = 1012
-        val GET_USER_MISSING_USER_ID_ERROR_CODE = 1013
+        val USER_MISSING_USER_ID_ERROR_CODE = 1013
         val USER_ON_BOARDING_STATUS_ERROR_CODE = 1014
         val USER_ON_BLOCKING_STATUS_ERROR_CODE = 1015
         val USER_ON_DELETING_STATUS_ERROR_CODE = 1015
@@ -33,10 +33,32 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MISSING_USER_NAME_ERROR_MESSAGE = "Missing user name"
         val USER_NOT_FOUND_ERROR_MESSAGE = "User not found"
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_MESSAGE = "User not found"
-        val GET_USER_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val USER_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
         val USER_ON_BOARDING_STATUS_ERROR_MESSAGE = "Account doesn't complete onboarding steps"
         val USER_ON_BLOCKING_STATUS_ERROR_MESSAGE = "Account is in blocking time"
         val USER_ON_DELETING_STATUS_ERROR_MESSAGE = "Account was deleted"
+
+
+        // Package error code
+        val MISSING_PACKAGE_NAME_ERROR_CODE = 1030
+        val MISSING_PACKAGE_BASE_PRICE_ERROR_CODE = 1031
+
+
+        // Package error message
+        val MISSING_PACKAGE_NAME_ERROR_MESSAGE = "Missing package name"
+        val MISSING_PACKAGE_BASE_PRICE_ERROR_MESSAGE = "Missing base price"
+
+
+        // User credit error code
+        val USER_CREDIT_MISSING_USER_ID_ERROR_CODE = 1050
+        val USER_CREDIT_NOT_FOUND_ERROR_CODE = 1051
+        val USER_CREDIT_MISSING_CREDIT_CHANGE_ERROR_CODE = 1052
+
+
+        // User credit error message
+        val USER_CREDIT_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val USER_CREDIT_NOT_FOUND_ERROR_MESSAGE = "User credit not found"
+        val USER_CREDIT_MISSING_CREDIT_CHANGE_ERROR_MESSAGE = "Missing credit change"
 
 
         // Common error code

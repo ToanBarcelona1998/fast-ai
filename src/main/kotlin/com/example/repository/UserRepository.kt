@@ -109,12 +109,23 @@ class UserRepository : IUserRepository {
                     it[status] = request.status
                 }
 
+                if(request.address != null){
+                    it[address] = request.address
+                }
+
+                if(request.birthday != null){
+                    it[birthday] = request.birthday
+                }
+
+                if(request.avatar != null){
+                    it[avatar] = request.avatar
+                }
+
+                if(request.phoneNumber != null){
+                    it[phoneNumber] = request.phoneNumber
+                }
+
                 it[updatedAt] = updateAt
-                it[avatar] = request.avatar
-                it[avatar] = request.avatar
-                it[address] = request.address
-                it[birthday] = request.birthday
-                it[phoneNumber] = request.phoneNumber
             }
 
             user!!.copyWith(
