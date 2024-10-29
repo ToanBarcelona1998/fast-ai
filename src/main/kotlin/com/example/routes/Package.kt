@@ -1,12 +1,10 @@
 package com.example.routes
 
-import com.example.domain.models.BaseResponseSuccessful
 import com.example.services.PackageService
+import com.example.utils.parseDataToRespond
 import com.example.utils.parseErrorToRespond
-import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.math.BigDecimal
 
@@ -17,7 +15,7 @@ fun Route.packageRoutes(packageService: PackageService){
                 try{
                     val getAllPackagesResponse = packageService.getAll()
 
-                    call.respond(HttpStatusCode.OK , message = BaseResponseSuccessful(data = getAllPackagesResponse))
+                    parseDataToRespond(getAllPackagesResponse,call)
                 }catch (e : Exception){
                     parseErrorToRespond(e,call)
                 }
@@ -35,7 +33,7 @@ fun Route.packageRoutes(packageService: PackageService){
 
                     val status = packageService.add(name = name , description = description, basePrice = BigDecimal(basePrice))
 
-                    call.respond(HttpStatusCode.OK, message = BaseResponseSuccessful(data = status))
+                    parseDataToRespond(status,call)
                 }catch (e : Exception){
                     parseErrorToRespond(e,call)
                 }
