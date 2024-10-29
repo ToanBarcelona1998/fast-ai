@@ -2,9 +2,11 @@ package com.example.application.plugins
 
 import com.example.domain.models.BaseResponseError
 import com.example.routes.authRoutes
+import com.example.routes.packageRoutes
 import com.example.routes.test
 import com.example.routes.userRoutes
 import com.example.services.AuthService
+import com.example.services.PackageService
 import com.example.services.UserService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -35,9 +37,12 @@ fun Application.configureRouting() {
 
     val userService : UserService by inject()
 
+    val packageService : PackageService by inject()
+
     routing {
         userRoutes(userService)
         authRoutes(authService)
+        packageRoutes(packageService)
         test()
     }
 

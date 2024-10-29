@@ -30,7 +30,7 @@ final class PackageRepository : IPackageRepository {
                 credits = request.credits,
                 description = request.description,
                 basePrice = request.basePrice,
-                promoPrice = request.promoPrice,
+                promoPrice = null,
                 createdAt = createdDate.toString(),
                 isActive = true,
                 promoEndTime = null,

@@ -1,36 +1,32 @@
 package com.example.routes
 
-import com.example.domain.models.BaseResponseSuccessful
+import com.example.services.UserCreditService
 import com.example.services.UserService
 import com.example.utils.claimId
+import com.example.utils.parseDataToRespond
 import com.example.utils.parseErrorToRespond
-import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.userRoutes(userService: UserService) {
+fun Route.userRoutes(userService: UserService , userCreditService: UserCreditService) {
     route("/user") {
         authenticate {
             get {
                 try {
-                    val id = claimId(call)
+                    val id = call.claimId()
 
-                    val user = userService.getUserById(id)
+                    val response = userService.getUserById(id)
 
-                    call.respond(
-                        status = HttpStatusCode.OK,
-                        BaseResponseSuccessful(data = user)
-                    )
+                    call.parseDataToRespond(response)
                 } catch (e: Exception) {
-                    parseErrorToRespond(e, call)
+                    call.parseErrorToRespond(e)
                 }
             }
 
             put {
                 try {
-                    val id = claimId(call)
+                    val id = call.claimId()
 
                     val formData = call.receiveParameters()
 
@@ -54,7 +50,19 @@ fun Route.userRoutes(userService: UserService) {
                     )
 
                 } catch (e: Exception) {
-                    parseErrorToRespond(e, call)
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            get("/credit") {
+                try{
+                    val id = call.claimId()
+
+                    val response = userCreditService.getUserCredit(id)
+
+                    call.parseDataToRespond(response)
+                }catch (e: Exception){
+                    call.parseErrorToRespond(e)
                 }
             }
         }
