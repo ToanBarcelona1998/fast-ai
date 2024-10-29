@@ -42,11 +42,15 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         // Package error code
         val MISSING_PACKAGE_NAME_ERROR_CODE = 1030
         val MISSING_PACKAGE_BASE_PRICE_ERROR_CODE = 1031
+        val MISSING_PACKAGE_ID_ERROR_CODE = 1032
+        val PACKAGE_NOT_FOUND_ERROR_CODE = 1033
 
 
         // Package error message
         val MISSING_PACKAGE_NAME_ERROR_MESSAGE = "Missing package name"
         val MISSING_PACKAGE_BASE_PRICE_ERROR_MESSAGE = "Missing base price"
+        val MISSING_PACKAGE_ID_ERROR_MESSAGE = "Missing package id"
+        val PACKAGE_NOT_FOUND_ERROR_MESSAGE = "Package not found"
 
 
         // User credit error code
@@ -68,6 +72,16 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PAYMENT_PROVIDER_MISSING_NAME_ERROR_MESSAGE = "Missing method name"
         val PAYMENT_PROVIDER_EXISTS_ERROR_MESSAGE = "Payment method was exists"
 
+
+        // Purchase error code
+        val PURCHASE_MISSING_USER_ID_ERROR_CODE = 1090
+        val PURCHASE_MISSING_PACKAGE_ID_ERROR_CODE = 1091
+        val PURCHASE_MISSING_METHOD_ID_ERROR_CODE = 1092
+
+        // Purchase error message
+        val PURCHASE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val PURCHASE_MISSING_PACKAGE_ID_ERROR_MESSAGE = "Missing package id"
+        val PURCHASE_MISSING_METHOD_ID_ERROR_MESSAGE = "Missing method id"
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999
