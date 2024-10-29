@@ -60,6 +60,14 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val USER_CREDIT_NOT_FOUND_ERROR_MESSAGE = "User credit not found"
         val USER_CREDIT_MISSING_CREDIT_CHANGE_ERROR_MESSAGE = "Missing credit change"
 
+        // Payment provider error code
+        val PAYMENT_PROVIDER_MISSING_NAME_ERROR_CODE = 1070
+        val PAYMENT_PROVIDER_EXISTS_ERROR_CODE = 1071
+
+        // Payment provider error message
+        val PAYMENT_PROVIDER_MISSING_NAME_ERROR_MESSAGE = "Missing method name"
+        val PAYMENT_PROVIDER_EXISTS_ERROR_MESSAGE = "Payment method was exists"
+
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999

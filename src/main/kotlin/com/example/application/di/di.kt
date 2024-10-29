@@ -1,27 +1,29 @@
 package com.example.application.di
 
-import com.example.repository.AccountRepository
-import com.example.repository.PackageRepository
-import com.example.repository.UserRepository
-import com.example.repository.interfaces.IAccountRepository
-import com.example.repository.interfaces.IPackageRepository
-import com.example.repository.interfaces.IUserRepository
-import com.example.services.AccountService
-import com.example.services.AuthService
-import com.example.services.PackageService
-import com.example.services.UserService
+import com.example.repository.*
+import com.example.repository.interfaces.*
+import com.example.services.*
 import org.koin.dsl.module
 
 val injection = module {
+    // Repository
     single<IAccountRepository> { AccountRepository() }
 
     single<IUserRepository> { UserRepository() }
 
     single<IPackageRepository> { PackageRepository() }
 
+    single<IUserCreditRepository> { UserCreditRepository() }
+
+    single<IPaymentProviderRepository> { PaymentProviderRepository() }
+    //
+
+
+    // Service
     single<AccountService> {
         AccountService(get<IAccountRepository>())
     }
+
     single<UserService> {
         UserService(get<IUserRepository>())
     }
@@ -31,4 +33,14 @@ val injection = module {
     single<AuthService> {
         AuthService(get<AccountService>(), get<UserService>())
     }
+
+    single<UserCreditService> {
+        UserCreditService(get<IUserCreditRepository>())
+    }
+
+
+    single<PaymentProviderService> {
+        PaymentProviderService(get<IPaymentProviderRepository>())
+    }
+    //
 }
