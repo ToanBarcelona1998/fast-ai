@@ -85,6 +85,8 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PURCHASE_MISSING_STATUS_ERROR_CODE = 1094
         val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_CODE = 1095
         val PURCHASE_MISSING_MULTI_REQUEST_ERROR_CODE = 1096
+        val PURCHASE_PURCHASE_NOT_FOUND_ERROR_CODE = 1097
+        val PURCHASE_PURCHASE_ALREADY_UPDATE_ERROR_CODE = 1098
 
         // Purchase error message
         val PURCHASE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
@@ -94,6 +96,8 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PURCHASE_MISSING_STATUS_ERROR_MESSAGE = "Missing transaction status"
         val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_MESSAGE = "Transaction status has to be in [pending, completed , failed]"
         val PURCHASE_MISSING_MULTI_REQUEST_ERROR_MESSAGE = "Missing requests"
+        val PURCHASE_PURCHASE_NOT_FOUND_ERROR_MESSAGE = "Transaction not found"
+        val PURCHASE_PURCHASE_ALREADY_UPDATE_ERROR_MESSAGE = "Transaction was already updated"
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999
