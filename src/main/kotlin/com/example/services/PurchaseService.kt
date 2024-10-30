@@ -1,6 +1,7 @@
 package com.example.services
 
 import com.example.domain.exceptions.FastAiException
+import com.example.domain.models.entity.Purchase
 import com.example.domain.models.requests.PurchaseAddRequest
 import com.example.domain.models.requests.PurchaseUpdateRequest
 import com.example.domain.models.requests.PurchaseUpdateRequests
@@ -68,6 +69,17 @@ class PurchaseService(private val purchaseRepository : IPurchaseRepository ,priv
             val parsedRequest : List<PurchaseUpdateRequests> = Json.decodeFromString(requests)
 
             purchaseRepository.multiUpdate(parsedRequest)
+        }
+    }
+
+    suspend fun get(id : Int?) : Purchase{
+        return catchBlockService {
+
+            if(id == null){
+                throw FastAiException(FastAiException.PURCHASE_MISSING_ID_ERROR_CODE, FastAiException.PURCHASE_MISSING_ID_ERROR_MESSAGE)
+            }
+
+            purchaseRepository.get(id) ?: throw FastAiException(FastAiException.PURCHASE_PURCHASE_NOT_FOUND_ERROR_CODE, FastAiException.PURCHASE_PURCHASE_NOT_FOUND_ERROR_MESSAGE)
         }
     }
 }

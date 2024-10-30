@@ -8,7 +8,9 @@ import com.example.domain.models.requests.PurchaseUpdateRequest
 import com.example.domain.models.requests.PurchaseUpdateRequests
 import com.example.repository.interfaces.IPurchaseRepository
 import kotlinx.datetime.Clock
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
@@ -17,8 +19,8 @@ final class PurchaseRepository : IPurchaseRepository {
         return transaction {
             val now = Clock.System.now()
 
-            for(request in requests){
-                PurchaseTable.update({PurchaseTable.id eq  request.id}){
+            for (request in requests) {
+                PurchaseTable.update({ PurchaseTable.id eq request.id }) {
                     it[status] = request.status
                     it[data] = request.data
                     it[updatedAt] = now
@@ -50,7 +52,8 @@ final class PurchaseRepository : IPurchaseRepository {
                 packageId = request.packageId,
                 creditsPurchased = request.creditsPurchased,
                 methodId = request.methodId,
-                createdAt = now.toString()
+                createdAt = now.toString(),
+                updatedAt = null
             )
         }
     }
@@ -59,13 +62,30 @@ final class PurchaseRepository : IPurchaseRepository {
         return transaction {
             val now = Clock.System.now()
 
-            PurchaseTable.update({ PurchaseTable.id eq id }){
+            PurchaseTable.update({ PurchaseTable.id eq id }) {
                 it[status] = request.status
                 it[data] = request.data
                 it[updatedAt] = now
             }
 
             true
+        }
+    }
+
+    override suspend fun get(id: Int): Purchase? {
+        return transaction {
+            PurchaseTable.selectAll().where(PurchaseTable.id eq id).map {
+                Purchase(
+                    id = it[PurchaseTable.id],
+                    packageId = it[PurchaseTable.packageId],
+                    status = it[PurchaseTable.status],
+                    methodId = it[PurchaseTable.paymentProviderId],
+                    userId = it[PurchaseTable.userId],
+                    createdAt = it[PurchaseTable.createdAt].toString(),
+                    creditsPurchased = it[PurchaseTable.creditsPurchased],
+                    updatedAt = it[PurchaseTable.updatedAt]?.toString()
+                )
+            }.firstOrNull()
         }
     }
 }
