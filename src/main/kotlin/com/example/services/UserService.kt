@@ -76,14 +76,14 @@ class UserService(private val userRepository: IUserRepository) {
         status: Int?,
     ) : Boolean{
 
-        if(id == null){
-            throw FastAiException(
-                FastAiException.USER_MISSING_USER_ID_ERROR_CODE,
-                message = FastAiException.USER_MISSING_USER_ID_ERROR_MESSAGE
-            )
-        }
-
         return catchBlockService {
+            if(id == null){
+                throw FastAiException(
+                    FastAiException.USER_MISSING_USER_ID_ERROR_CODE,
+                    message = FastAiException.USER_MISSING_USER_ID_ERROR_MESSAGE
+                )
+            }
+
             val request = UserUpdateRequest(
                 userName = userName,
                 gender = gender,
@@ -95,8 +95,6 @@ class UserService(private val userRepository: IUserRepository) {
             )
 
             userRepository.update(id, request)
-
-            true
         }
     }
 

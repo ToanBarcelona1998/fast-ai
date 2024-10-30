@@ -67,21 +67,33 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         // Payment provider error code
         val PAYMENT_PROVIDER_MISSING_NAME_ERROR_CODE = 1070
         val PAYMENT_PROVIDER_EXISTS_ERROR_CODE = 1071
+        val PAYMENT_PROVIDER_MISSING_TYPE_ERROR_CODE = 1072
+        val PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_CODE = 1073
 
         // Payment provider error message
         val PAYMENT_PROVIDER_MISSING_NAME_ERROR_MESSAGE = "Missing method name"
         val PAYMENT_PROVIDER_EXISTS_ERROR_MESSAGE = "Payment method was exists"
+        val PAYMENT_PROVIDER_MISSING_TYPE_ERROR_MESSAGE = "Missing method type"
+        val PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_MESSAGE = "Method type doesn't be supported"
 
 
         // Purchase error code
         val PURCHASE_MISSING_USER_ID_ERROR_CODE = 1090
         val PURCHASE_MISSING_PACKAGE_ID_ERROR_CODE = 1091
         val PURCHASE_MISSING_METHOD_ID_ERROR_CODE = 1092
+        val PURCHASE_MISSING_ID_ERROR_CODE = 1093
+        val PURCHASE_MISSING_STATUS_ERROR_CODE = 1094
+        val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_CODE = 1095
+        val PURCHASE_MISSING_MULTI_REQUEST_ERROR_CODE = 1096
 
         // Purchase error message
         val PURCHASE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
         val PURCHASE_MISSING_PACKAGE_ID_ERROR_MESSAGE = "Missing package id"
         val PURCHASE_MISSING_METHOD_ID_ERROR_MESSAGE = "Missing method id"
+        val PURCHASE_MISSING_ID_ERROR_MESSAGE = "Missing transaction id"
+        val PURCHASE_MISSING_STATUS_ERROR_MESSAGE = "Missing transaction status"
+        val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_MESSAGE = "Transaction status has to be in [pending, completed , failed]"
+        val PURCHASE_MISSING_MULTI_REQUEST_ERROR_MESSAGE = "Missing requests"
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999

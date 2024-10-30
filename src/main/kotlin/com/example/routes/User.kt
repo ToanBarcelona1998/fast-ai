@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.services.PurchaseService
 import com.example.services.UserCreditService
 import com.example.services.UserService
 import com.example.utils.claimId
@@ -9,7 +10,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
-fun Route.userRoutes(userService: UserService , userCreditService: UserCreditService) {
+fun Route.userRoutes(userService: UserService, userCreditService: UserCreditService, purchaseService: PurchaseService) {
     route("/user") {
         authenticate {
             get {
@@ -55,16 +56,50 @@ fun Route.userRoutes(userService: UserService , userCreditService: UserCreditSer
             }
 
             get("/credit") {
-                try{
+                try {
                     val id = call.claimId()
 
                     val response = userCreditService.getUserCredit(id)
 
                     call.parseDataToRespond(response)
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     call.parseErrorToRespond(e)
                 }
             }
+
+            post("/purchase") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+
+                    val methodId = formData["method_id"]?.toInt()
+                    val packageId = formData["package_id"]?.toInt()
+
+                    val response =
+                        purchaseService.createTransaction(userId = userId, methodId = methodId, packageId = packageId)
+
+                    call.parseDataToRespond(response)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+//            put("/purchase") {
+//                try {
+//                    val formData = call.receiveParameters()
+//
+//                    val id = formData["id"]?.toInt()
+//                    val status = formData["status"]
+//                    val data = formData["data"]
+//
+//                    val statusResponse = purchaseService.update(id= id , status = status , data = data)
+//
+//                    call.parseDataToRespond(statusResponse)
+//                } catch (e: Exception) {
+//                    call.parseErrorToRespond(e)
+//                }
+//            }
         }
     }
 }

@@ -20,15 +20,15 @@ final class UserCreditRepository : IUserCreditRepository {
         }
     }
 
-    override suspend fun update(id: Int, request: UserCreditUpdateRequest): UserCredit {
-        transaction {
+    override suspend fun update(id: Int, request: UserCreditUpdateRequest): Boolean {
+        return transaction {
             val now = Clock.System.now()
             UserCreditTable.update({ UserCreditTable.userId eq id }) {
                 it.update(remainingCredits , remainingCredits + request.creditChange)
                 it[updatedAt] = now
             }
-        }
 
-        return getCreditByUserId(id)!!
+            true
+        }
     }
 }

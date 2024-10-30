@@ -46,20 +46,10 @@ final class AccountRepository : IAccountRepository {
         }
     }
 
-    override suspend fun update(id: Int, request: AccountUpdateRequest): Account {
+    override suspend fun update(id: Int, request: AccountUpdateRequest): Boolean {
         return transaction {
 
             val updateAt = Clock.System.now()
-
-            val account = AccountTable.selectAll().where { AccountTable.id eq id }.limit(1).map {
-                Account(
-                    it[AccountTable.id],
-                    it[AccountTable.email],
-                    it[AccountTable.password],
-                    it[AccountTable.createdAt].toString(),
-                    it[AccountTable.updatedAt]?.toString(),
-                )
-            }.firstOrNull()
 
             AccountTable.update({ AccountTable.id eq id }) {
 
@@ -70,10 +60,7 @@ final class AccountRepository : IAccountRepository {
                 it[updatedAt] = updateAt
             }
 
-            account!!.copyWith(
-                password = request.password,
-                updateAt = updateAt.toString(),
-            )
+            true
         }
     }
 

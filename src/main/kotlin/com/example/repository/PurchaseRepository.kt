@@ -1,14 +1,33 @@
 package com.example.repository
 
+
 import com.example.database.PurchaseTable
 import com.example.domain.models.entity.Purchase
 import com.example.domain.models.requests.PurchaseAddRequest
+import com.example.domain.models.requests.PurchaseUpdateRequest
+import com.example.domain.models.requests.PurchaseUpdateRequests
 import com.example.repository.interfaces.IPurchaseRepository
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 final class PurchaseRepository : IPurchaseRepository {
+    override suspend fun multiUpdate(requests: List<PurchaseUpdateRequests>): Boolean {
+        return transaction {
+            val now = Clock.System.now()
+
+            for(request in requests){
+                PurchaseTable.update({PurchaseTable.id eq  request.id}){
+                    it[status] = request.status
+                    it[data] = request.data
+                    it[updatedAt] = now
+                }
+            }
+            true
+        }
+    }
+
     override suspend fun add(request: PurchaseAddRequest): Purchase {
         return transaction {
             val now = Clock.System.now()
@@ -33,6 +52,20 @@ final class PurchaseRepository : IPurchaseRepository {
                 methodId = request.methodId,
                 createdAt = now.toString()
             )
+        }
+    }
+
+    override suspend fun update(id: Int, request: PurchaseUpdateRequest): Boolean {
+        return transaction {
+            val now = Clock.System.now()
+
+            PurchaseTable.update({ PurchaseTable.id eq id }){
+                it[status] = request.status
+                it[data] = request.data
+                it[updatedAt] = now
+            }
+
+            true
         }
     }
 }

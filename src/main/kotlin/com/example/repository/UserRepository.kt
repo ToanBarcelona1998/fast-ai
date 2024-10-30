@@ -75,25 +75,8 @@ class UserRepository : IUserRepository {
         }
     }
 
-    override suspend fun update(id: Int, request: UserUpdateRequest): User {
+    override suspend fun update(id: Int, request: UserUpdateRequest): Boolean {
         return transaction {
-
-            val user = UserTable.selectAll().where { UserTable.id eq id }.limit(1).map {
-                User(
-                    it[UserTable.id],
-                    it[UserTable.userName],
-                    it[UserTable.phoneNumber],
-                    it[UserTable.gender],
-                    it[UserTable.address],
-                    it[UserTable.avatar],
-                    it[UserTable.birthday],
-                    it[UserTable.accountId],
-                    it[UserTable.updatedAt]?.toString(),
-                    it[UserTable.createdAt].toString(),
-                    it[UserTable.status],
-                )
-            }.firstOrNull()
-
             val updateAt = Clock.System.now()
 
             UserTable.update({ UserTable.id eq id }) {
@@ -128,18 +111,7 @@ class UserRepository : IUserRepository {
                 it[updatedAt] = updateAt
             }
 
-            user!!.copyWith(
-                avatar = request.avatar,
-                address = request.address,
-                updateAt = updateAt.toString(),
-                userName = request.userName,
-                gender = request.gender,
-                status = request.status,
-                birthday = request.birthday,
-                createAt = null,
-                phoneNumber = request.phoneNumber,
-                id = null
-            )
+            true
         }
     }
 
