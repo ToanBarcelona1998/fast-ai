@@ -12,3 +12,9 @@ fun validatePurchaseStatus(status: String) : Boolean{
 
     return allowStatus.contains(status)
 }
+
+fun validatePaymentMethodType(type : String) : Boolean{
+    val allowType = listOf("web3" , "google" , "apple")
+
+    return allowType.contains(type)
+}

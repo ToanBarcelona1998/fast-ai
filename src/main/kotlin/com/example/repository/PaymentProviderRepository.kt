@@ -17,7 +17,8 @@ final class PaymentProviderRepository : IPaymentProviderRepository {
                 PaymentProvider(
                     id = it[PaymentProviderTable.id],
                     name = it[PaymentProviderTable.name],
-                    description = it[PaymentProviderTable.description]
+                    description = it[PaymentProviderTable.description],
+                    type = it[PaymentProviderTable.type]
                 )
             }.firstOrNull()
         }
@@ -28,9 +29,10 @@ final class PaymentProviderRepository : IPaymentProviderRepository {
             val id = PaymentProviderTable.insert {
                 it[name] = request.name
                 it[description] = request.description
+                it[type] = request.type
             }[PaymentProviderTable.id]
 
-            PaymentProvider(id = id, name = request.name, description = request.description)
+            PaymentProvider(id = id, name = request.name, description = request.description , type = request.type)
         }
     }
 
@@ -40,7 +42,8 @@ final class PaymentProviderRepository : IPaymentProviderRepository {
                 PaymentProvider(
                     id = it[PaymentProviderTable.id],
                     name = it[PaymentProviderTable.name],
-                    description = it[PaymentProviderTable.description]
+                    description = it[PaymentProviderTable.description],
+                    type = it[PaymentProviderTable.type]
                 )
             }
         }

@@ -67,10 +67,14 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         // Payment provider error code
         val PAYMENT_PROVIDER_MISSING_NAME_ERROR_CODE = 1070
         val PAYMENT_PROVIDER_EXISTS_ERROR_CODE = 1071
+        val PAYMENT_PROVIDER_MISSING_TYPE_ERROR_CODE = 1072
+        val PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_CODE = 1073
 
         // Payment provider error message
         val PAYMENT_PROVIDER_MISSING_NAME_ERROR_MESSAGE = "Missing method name"
         val PAYMENT_PROVIDER_EXISTS_ERROR_MESSAGE = "Payment method was exists"
+        val PAYMENT_PROVIDER_MISSING_TYPE_ERROR_MESSAGE = "Missing method type"
+        val PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_MESSAGE = "Method type doesn't be supported"
 
 
         // Purchase error code
