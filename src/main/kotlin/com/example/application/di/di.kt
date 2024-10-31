@@ -8,10 +8,11 @@ import com.example.client.AwsS3Client
 import com.example.repository.*
 import com.example.repository.interfaces.*
 import com.example.services.*
+import io.ktor.client.*
+import io.ktor.client.plugins.*
 import org.koin.dsl.module
 
 val injection = module {
-
     val s3Client = S3Client {
         region = ApplicationConfig.getS3Region()
         credentialsProvider = StaticCredentialsProvider(
@@ -20,6 +21,12 @@ val injection = module {
                 secretAccessKey = ApplicationConfig.getS3SecretKey()
             )
         )
+    }
+
+    factory<HttpClient> {
+        HttpClient(){
+            defaultRequest {  }
+        }
     }
 
     single<S3Client> { s3Client }
@@ -37,8 +44,6 @@ val injection = module {
     single<IUserCreditRepository> { UserCreditRepository() }
 
     single<IPaymentProviderRepository> { PaymentProviderRepository() }
-
-    single<IS3Repository> { S3Repository(get<AwsS3Client>()) }
     //
 
 
@@ -67,7 +72,7 @@ val injection = module {
     }
 
     single<UploadService> {
-        UploadService(get<IS3Repository>())
+        UploadService(get<AwsS3Client>())
     }
     //
 }

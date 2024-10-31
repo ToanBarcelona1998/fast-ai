@@ -1,11 +1,11 @@
 package com.example.services
 
+import com.example.client.AwsS3Client
 import com.example.domain.exceptions.FastAiException
-import com.example.repository.interfaces.IS3Repository
 import com.example.utils.catchBlockService
 import java.io.File
 
-class UploadService (private val iS3Repository: IS3Repository){
+class UploadService (private val awsS3Client: AwsS3Client){
     suspend fun uploadFile(file : File, folder : String) : String{
         return catchBlockService {
             // Limit to 10 MB
@@ -15,7 +15,7 @@ class UploadService (private val iS3Repository: IS3Repository){
 
             val key = "$folder/${file.name}"
 
-            iS3Repository.add(request = key)
+            awsS3Client.upload(originKey = key)
         }
     }
 

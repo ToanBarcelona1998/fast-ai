@@ -107,6 +107,12 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val UPLOAD_FILE_TOO_LARGE_ERROR_MESSAGE = "File is too large"
 
 
+        // RunWare error code
+        val RUNWARE_SEND_REQUEST_ERROR_CODE = 1150
+
+        // RunWare error message
+
+
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999
         val DATABASE_ERROR_CODE = 10000
