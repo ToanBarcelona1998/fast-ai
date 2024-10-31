@@ -26,8 +26,9 @@ fun Route.paymentProviderRoutes(paymentProviderService: PaymentProviderService){
 
                     val name = formData["method_name"]
                     val description = formData["description"]
+                    val type = formData["type"]
 
-                    val status = paymentProviderService.add(name,description)
+                    val status = paymentProviderService.add(name,description , type = type)
 
                     call.parseDataToRespond(status)
                 }catch (e: Exception){

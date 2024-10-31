@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.client
 
 class AppleClient {
     suspend fun verifyApplePurchase(token : String) : Boolean{
