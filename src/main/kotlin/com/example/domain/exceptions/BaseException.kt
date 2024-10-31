@@ -99,6 +99,14 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PURCHASE_PURCHASE_NOT_FOUND_ERROR_MESSAGE = "Transaction not found"
         val PURCHASE_PURCHASE_ALREADY_UPDATE_ERROR_MESSAGE = "Transaction was already updated"
 
+
+        // Upload file error code
+        val UPLOAD_FILE_TOO_LARGE_ERROR_CODE = 1110
+
+        // Upload file error message
+        val UPLOAD_FILE_TOO_LARGE_ERROR_MESSAGE = "File is too large"
+
+
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999
         val DATABASE_ERROR_CODE = 10000

@@ -14,6 +14,8 @@ object ApplicationConfig {
     private val WEB3_API_URL = "WEB3_API_URL"
     private val S3_SECRET_KEY = "S3_SECRET_KEY"
     private val S3_ACCESS_KEY = "S3_ACCESS_KEY"
+    private val S3_REGION = "S3_REGION"
+    private val S3_BUCKET_NAME = "S3_BUCKET_NAME"
 
     private val dotenv = dotenv()
 
@@ -60,5 +62,13 @@ object ApplicationConfig {
 
     fun getS3AccessKey() : String {
         return System.getenv(S3_ACCESS_KEY) ?: dotenv[S3_ACCESS_KEY]
+    }
+
+    fun getS3Region() : String {
+        return System.getenv(S3_REGION) ?: dotenv[S3_REGION]
+    }
+
+    fun getS3BucketName() : String {
+        return System.getenv(S3_BUCKET_NAME) ?: dotenv[S3_BUCKET_NAME]
     }
 }

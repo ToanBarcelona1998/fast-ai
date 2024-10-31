@@ -8,6 +8,7 @@ val hikariVersion: String by project
 val koinVersion : String by project
 val cryptoVersion : String by project
 val envVersion : String by project
+val s3Version : String by project
 
 
 plugins {
@@ -54,4 +55,5 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.mindrot:jbcrypt:$cryptoVersion")
     implementation("io.github.cdimascio:dotenv-kotlin:$envVersion")
+    implementation("aws.sdk.kotlin:s3:$s3Version")
 }

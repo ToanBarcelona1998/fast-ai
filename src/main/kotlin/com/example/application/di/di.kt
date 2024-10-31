@@ -1,11 +1,32 @@
 package com.example.application.di
 
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import com.example.application.config.ApplicationConfig
+import com.example.client.AwsS3Client
 import com.example.repository.*
 import com.example.repository.interfaces.*
 import com.example.services.*
 import org.koin.dsl.module
 
 val injection = module {
+
+    val s3Client = S3Client {
+        region = ApplicationConfig.getS3Region()
+        credentialsProvider = StaticCredentialsProvider(
+            Credentials(
+                accessKeyId = ApplicationConfig.getS3AccessKey(),
+                secretAccessKey = ApplicationConfig.getS3SecretKey()
+            )
+        )
+    }
+
+    single<S3Client> { s3Client }
+
+    // Client
+    single<AwsS3Client> { AwsS3Client(get<S3Client>(), ApplicationConfig.getS3BucketName()) }
+
     // Repository
     single<IAccountRepository> { AccountRepository() }
 
@@ -16,6 +37,8 @@ val injection = module {
     single<IUserCreditRepository> { UserCreditRepository() }
 
     single<IPaymentProviderRepository> { PaymentProviderRepository() }
+
+    single<IS3Repository> { S3Repository(get<AwsS3Client>()) }
     //
 
 
@@ -41,6 +64,10 @@ val injection = module {
 
     single<PaymentProviderService> {
         PaymentProviderService(get<IPaymentProviderRepository>())
+    }
+
+    single<UploadService> {
+        UploadService(get<IS3Repository>())
     }
     //
 }
