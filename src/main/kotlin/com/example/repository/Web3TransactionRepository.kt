@@ -1,6 +1,6 @@
 package com.example.repository
 
-import com.example.data.Web3Client
+import com.example.client.Web3Client
 import com.example.repository.interfaces.ITransactionRepository
 
 class Web3TransactionRepository(private val web3Client: Web3Client) : ITransactionRepository {

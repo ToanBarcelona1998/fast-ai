@@ -1,6 +1,6 @@
 package com.example.repository
 
-import com.example.data.AppleClient
+import com.example.client.AppleClient
 import com.example.repository.interfaces.ITransactionRepository
 
 class AppleTransactionRepository(private val appleClient: AppleClient) : ITransactionRepository {

@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.client
 
 class GoogleClient {
     suspend fun verifyGooglePlayPurchase(): Boolean{
