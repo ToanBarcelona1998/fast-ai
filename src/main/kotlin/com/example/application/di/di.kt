@@ -25,7 +25,9 @@ val injection = module {
 
     factory<HttpClient> {
         HttpClient(){
-            defaultRequest {  }
+            defaultRequest {
+
+            }
         }
     }
 

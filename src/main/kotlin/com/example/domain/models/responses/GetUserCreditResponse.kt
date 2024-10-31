@@ -5,4 +5,4 @@ import com.example.domain.models.entity.UserCredit
 import kotlinx.serialization.*
 
 @Serializable
-data class GetUserCreditResponse(private val userCredit: UserCredit)
+data class GetUserCreditResponse(val userCredit: UserCredit)

@@ -6,7 +6,8 @@ import kotlinx.serialization.*
 data class FastAIImage(
     val taskType: String,
     val imageUUID: String,
-    val imageURL: String,
+    val taskUUID : String,
+    val imageBase64Data: String,
     val NSFWContent: Boolean?
 )
 
@@ -14,7 +15,7 @@ data class FastAIImage(
 data class FastAIControlNetImage(
     val taskUUID: String,
     val inputImageUUID: String,
-    val guideImageURL: String,
+    val guideImageBase64Data: String,
 )
 
 @Serializable
