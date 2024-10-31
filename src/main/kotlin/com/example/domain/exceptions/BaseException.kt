@@ -109,9 +109,28 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
 
         // RunWare error code
         val RUNWARE_SEND_REQUEST_ERROR_CODE = 1150
+        val RUNWARE_MISSING_MODEL_ERROR_CODE = 1151
+        val RUNWARE_MISSING_PROMPT_ERROR_CODE = 1152
+        val RUNWARE_INVALID_TASK_ERROR_CODE = 1153
+        val RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_CODE = 1154
+        val RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE = 1155
 
         // RunWare error message
+        val RUNWARE_MISSING_MODEL_ERROR_MESSAGE = "Missing model"
+        val RUNWARE_MISSING_PROMPT_ERROR_MESSAGE = "Missing prompt"
+        val RUNWARE_INVALID_TASK_ERROR_MESSAGE = "Invalid task"
+        val RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_MESSAGE = "Insufficient balance"
+        val RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE = "Missing input image"
 
+        // Image error code
+        val IMAGE_MISSING_USER_ID_ERROR_CODE = 1070
+        val IMAGE_MISSING_FILE_FOMAT_ERROR_CODE = 1071
+        val IMAGE_MISSING_S3_PATH_ERROR_CODE = 1072
+
+        // Image error message
+        val IMAGE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val IMAGE_MISSING_FILE_FOMAT_ERROR_MESSAGE = "Missing file format"
+        val IMAGE_MISSING_S3_PATH_ERROR_MESSAGE = "Missing s3 url"
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999

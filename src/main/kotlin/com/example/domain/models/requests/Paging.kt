@@ -1,3 +1,3 @@
 package com.example.domain.models.requests
 
-data class Paging(val page: Int, val limit : Int?)
+data class Paging(val offset: Int, val limit : Int = 20)
