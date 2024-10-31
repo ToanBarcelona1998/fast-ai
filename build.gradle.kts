@@ -6,6 +6,8 @@ val exposedVersion: String by project
 val postgresqlVersion: String by project
 val hikariVersion: String by project
 val koinVersion : String by project
+val cryptoVersion : String by project
+val envVersion : String by project
 
 
 plugins {
@@ -50,5 +52,6 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.mindrot:jbcrypt:$cryptoVersion")
+    implementation("io.github.cdimascio:dotenv-kotlin:$envVersion")
 }
