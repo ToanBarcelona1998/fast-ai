@@ -7,6 +7,7 @@ import com.example.domain.models.entity.User
 import com.example.domain.models.responses.GenerateImagesResponse
 import com.example.domain.models.responses.GetUserResponse
 import com.example.domain.models.responses.RemoveBackgroundImageResponse
+import com.example.domain.models.responses.UpscaleImageResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
@@ -117,5 +118,9 @@ class UserService(private val userRepository: IUserRepository, private val fastA
 
     suspend fun removeBackgroundImage(userId : Int? , inputImage : String?) : RemoveBackgroundImageResponse{
         return fastAiService.removeBackground(userId, inputImage)
+    }
+
+    suspend fun upscaleImage(userId : Int? , inputImage : String?,scaleFactor : Int?) : UpscaleImageResponse{
+        return fastAiService.upScaleImage(userId, inputImage , scaleFactor)
     }
 }
