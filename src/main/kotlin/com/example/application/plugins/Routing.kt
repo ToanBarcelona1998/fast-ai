@@ -38,11 +38,16 @@ fun Application.configureRouting() {
 
     val paymentProviderService : PaymentProviderService by inject()
 
+    val purchaseService : PurchaseService by inject()
+
+    val uploadService : UploadService by inject()
+
     routing {
-        userRoutes(userService,userCreditService)
+        userRoutes(userService,userCreditService , purchaseService)
         authRoutes(authService)
         packageRoutes(packageService)
         paymentProviderRoutes(paymentProviderService)
+        uploadRoute(uploadService)
         test()
     }
 
