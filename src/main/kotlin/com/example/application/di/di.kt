@@ -10,10 +10,22 @@ import com.example.repository.*
 import com.example.repository.interfaces.*
 import com.example.services.*
 import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import org.koin.dsl.module
+
+val httpClient = HttpClient(CIO){
+    install(HttpTimeout){
+        requestTimeoutMillis = 20_000
+        connectTimeoutMillis = 20_000
+        socketTimeoutMillis = 20_000
+    }
+    install(ContentNegotiation){
+        json()
+    }
+}
 
 val injection = module {
     val s3Client = S3Client {
@@ -26,18 +38,7 @@ val injection = module {
         )
     }
 
-    single <HttpClient> {
-        HttpClient() {
-            install(HttpTimeout){
-                requestTimeoutMillis = 20_000
-                connectTimeoutMillis = 20_000
-                socketTimeoutMillis = 20_000
-            }
-            install(ContentNegotiation){
-                json()
-            }
-        }
-    }
+    single <HttpClient> { httpClient}
 
     // Client
     single<S3Client> { s3Client }
@@ -64,6 +65,8 @@ val injection = module {
     single<IPaymentProviderRepository> { PaymentProviderRepository() }
 
     single<IImageGeneratorRepository> { ImageGeneratorRepository() }
+
+    single<IPurchaseRepository> { PurchaseRepository() }
     //
 
 
@@ -90,6 +93,8 @@ val injection = module {
     single<PaymentProviderService> {
         PaymentProviderService(get<IPaymentProviderRepository>())
     }
+
+    single<PurchaseService> { PurchaseService(get<IPurchaseRepository>() , get<PackageService>()) }
 
     single<UploadService> {
         UploadService(get<AwsS3Client>())

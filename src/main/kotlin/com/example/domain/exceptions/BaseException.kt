@@ -114,6 +114,7 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val RUNWARE_INVALID_TASK_ERROR_CODE = 1153
         val RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_CODE = 1154
         val RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE = 1155
+        val RUNWARE_DEVELOP_ERROR_CODE = 1156
 
         // RunWare error message
         val RUNWARE_MISSING_MODEL_ERROR_MESSAGE = "Missing model"
@@ -121,6 +122,7 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val RUNWARE_INVALID_TASK_ERROR_MESSAGE = "Invalid task"
         val RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_MESSAGE = "Insufficient balance"
         val RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE = "Missing input image"
+        val RUNWARE_DEVELOP_ERROR_MESSAGE = "Develop error"
 
         // Image error code
         val IMAGE_MISSING_USER_ID_ERROR_CODE = 1070

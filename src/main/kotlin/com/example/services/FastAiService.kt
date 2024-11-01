@@ -50,6 +50,10 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
 
             val data = fastAiClient.generateImages(request)
 
+            if(data.data.isEmpty()){
+                throw FastAiException(FastAiException.RUNWARE_DEVELOP_ERROR_CODE,FastAiException.RUNWARE_DEVELOP_ERROR_MESSAGE)
+            }
+
             userCreditService.update(userId = userId , creditChange = -(number ?: 1))
 
             val listImage = data.data
@@ -93,6 +97,10 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
             val removeBgRequest = RemoveImageBackgroundTaskRequest(taskUUID = taskId , inputImage = inputImage)
 
             val data = fastAiClient.removeBackground(removeBgRequest)
+
+            if(data.data.isEmpty()){
+                throw FastAiException(FastAiException.RUNWARE_DEVELOP_ERROR_CODE,FastAiException.RUNWARE_DEVELOP_ERROR_MESSAGE)
+            }
 
             userCreditService.update(userId = userId , -1)
 
