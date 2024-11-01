@@ -85,21 +85,49 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                 }
             }
 
-//            put("/purchase") {
-//                try {
-//                    val formData = call.receiveParameters()
-//
-//                    val id = formData["id"]?.toInt()
-//                    val status = formData["status"]
-//                    val data = formData["data"]
-//
-//                    val statusResponse = purchaseService.update(id= id , status = status , data = data)
-//
-//                    call.parseDataToRespond(statusResponse)
-//                } catch (e: Exception) {
-//                    call.parseErrorToRespond(e)
-//                }
-//            }
+
+            post("/image-generator/generate-images") {
+                try {
+
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+
+                    val width = formData["width"]?.toInt()
+                    val height = formData["height"]?.toInt()
+                    val model = formData["model"]
+                    val positivePrompt = formData["prompt"]
+                    val number = formData["number"]?.toInt()
+
+                    val response = userService.generateImages(
+                        userId = userId,
+                        width = width,
+                        height = height,
+                        model = model,
+                        positivePrompt = positivePrompt,
+                        number = number
+                    )
+
+                    call.parseDataToRespond(response)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            post("/image-generator/remove-background") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+                    val inputImage = formData["image"]
+
+                    val response = userService.removeBackgroundImage(userId = userId , inputImage = inputImage)
+
+                    call.parseDataToRespond(response)
+                }catch (e : Exception){
+                    call.parseErrorToRespond(e)
+                }
+            }
         }
     }
 }
