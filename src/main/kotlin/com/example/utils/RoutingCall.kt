@@ -17,7 +17,7 @@ suspend  fun RoutingCall.parseErrorToRespond(e: Exception){
     }
 }
 
-suspend fun <T> RoutingCall.parseDataToRespond(data : T){
+suspend inline fun <reified T> RoutingCall.parseDataToRespond(data : T){
     respond(
         status = HttpStatusCode.OK,
         BaseResponseSuccessful(data = data)

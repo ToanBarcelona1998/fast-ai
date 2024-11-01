@@ -19,18 +19,24 @@ class FastAiClient(private val httpClient: HttpClient,private val fastAIUrl: Str
         try {
             val response = httpClient.post(fastAIUrl){
                 contentType(ContentType.Application.Json)
-                setBody(request)
+                setBody(listOf(request))
                 headers {
                     append("Authorization" , "Bearer $fastApiKey")
                     append("Accept" , "application/json")
                 }
             }
 
+            if(response.status != HttpStatusCode.OK){
+                val errorResponse = response.body<RunWareExceptions>()
+                throw errorResponse.toBaseException()
+            }
+
             return response.body<T>()
         }catch (e: ResponseException){
             val errorResponse = e.response.body<RunWareExceptions>()
-
             throw errorResponse.toBaseException()
+        }finally {
+            httpClient.close()
         }
     }
 

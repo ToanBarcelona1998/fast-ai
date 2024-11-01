@@ -31,4 +31,5 @@ data class FastAIImageToText(
     val text: String,
 )
 
+@Serializable
 data class FastAIData<T>(val data : List<T>)

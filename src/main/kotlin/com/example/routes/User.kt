@@ -97,6 +97,7 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     val height = formData["height"]?.toInt()
                     val model = formData["model"]
                     val positivePrompt = formData["prompt"]
+                    val negativePrompt = formData["negativePrompt"]
                     val number = formData["number"]?.toInt()
 
                     val response = userService.generateImages(
@@ -105,7 +106,8 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                         height = height,
                         model = model,
                         positivePrompt = positivePrompt,
-                        number = number
+                        number = number,
+                        negativePrompt = negativePrompt
                     )
 
                     call.parseDataToRespond(response)

@@ -17,23 +17,19 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
 
     private val defaultWidth = 512
     private val defaultHeight = 512
-    private val s3URL = "https://$bucketName.s3.amazonaws.com/images/"
+    private val s3URL = "https://$bucketName.s3.amazonaws.com/images/fast-ai"
 
-    suspend fun generateImages(userId : Int?,width: Int?, height: Int?, model: String?, positivePrompt: String?, number: Int?) : GenerateImagesResponse {
+    suspend fun generateImages(
+        userId: Int?,
+        width: Int? = defaultWidth,
+        height: Int? = defaultHeight,
+        model: String?,
+        positivePrompt: String?,
+        negativePrompt: String? = null,
+        number: Int? = 1
+    ): GenerateImagesResponse {
         return catchBlockService {
-
-            if (model.isNullOrEmpty()) {
-                throw FastAiException(
-                    FastAiException.RUNWARE_MISSING_MODEL_ERROR_CODE,
-                    FastAiException.RUNWARE_MISSING_MODEL_ERROR_MESSAGE
-                )
-            }
-            if (positivePrompt.isNullOrEmpty()) {
-                throw FastAiException(
-                    FastAiException.RUNWARE_MISSING_PROMPT_ERROR_CODE,
-                    FastAiException.RUNWARE_MISSING_PROMPT_ERROR_MESSAGE
-                )
-            }
+            validateGenerateImagesInputs(model, positivePrompt)
 
             checkUserCredit(userId)
 
@@ -41,82 +37,79 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
 
             val request = ImageTaskRequest(
                 taskUUID = taskId,
-                model = model,
-                positivePrompt = positivePrompt,
+                model = model!!,
+                positivePrompt = positivePrompt!!,
                 width = width ?: defaultWidth,
                 height = height ?: defaultHeight,
-                numberResults = number ?: 1
+                numberResults = number ?: 1,
+                negativePrompt = negativePrompt
             )
 
             val data = fastAiClient.generateImages(request)
 
-            userCreditService.update(userId = userId , creditChange = -(number ?: 1))
+            if (data.data.isEmpty()) {
+                throw FastAiException(FastAiException.RUNWARE_DEVELOP_ERROR_CODE, FastAiException.RUNWARE_DEVELOP_ERROR_MESSAGE)
+            }
 
-            val listImage = data.data
+            userCreditService.update(userId = userId, creditChange = -(number ?: 1))
 
-            val images = mutableListOf<Image>()
+            val images = data.data.map { image ->
+                validateTaskId(taskId, image.taskUUID)
 
-            for (image in listImage) {
-                if (taskId != image.taskUUID) {
-                    throw FastAiException(
-                        FastAiException.RUNWARE_INVALID_TASK_ERROR_CODE,
-                        FastAiException.RUNWARE_INVALID_TASK_ERROR_MESSAGE
-                    )
-                }
+                uploadToS3(image.imageBase64Data, image.imageUUID)
 
-                uploadToS3(image.imageBase64Data , image.imageUUID)
-
-                val addImageResponse = imageService.add(userId = userId,width = width ?: defaultWidth , height = height ?: defaultHeight , path = image.imageUUID , format = "png")
-
-
-                val imageCopy = addImageResponse.image.copy(
-                    s3Url = s3URL + image.imageUUID + ".png"
+                val addImageResponse = imageService.add(
+                    userId = userId,
+                    width = width ?: defaultWidth,
+                    height = height ?: defaultHeight,
+                    path = image.imageUUID,
+                    format = "png"
                 )
 
-                images.add(imageCopy)
+                addImageResponse.image.copy(
+                    s3Url = "$s3URL/${image.imageUUID}.png"
+                )
             }
 
             GenerateImagesResponse(images)
         }
     }
 
-    suspend fun removeBackground(userId : Int? , inputImage : String?) : RemoveBackgroundImageResponse{
+    suspend fun removeBackground(userId: Int?, inputImage: String?): RemoveBackgroundImageResponse {
         return catchBlockService {
             checkUserCredit(userId)
 
-            if(inputImage.isNullOrEmpty()){
-                throw FastAiException(FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE,FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE)
+            if (inputImage.isNullOrEmpty()) {
+                throw FastAiException(FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE, FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE)
             }
 
             val taskId = UUID.randomUUID().toString()
 
-            val removeBgRequest = RemoveImageBackgroundTaskRequest(taskUUID = taskId , inputImage = inputImage)
-
+            val removeBgRequest = RemoveImageBackgroundTaskRequest(taskUUID = taskId, inputImage = inputImage)
             val data = fastAiClient.removeBackground(removeBgRequest)
 
-            userCreditService.update(userId = userId , -1)
+            if (data.data.isEmpty()) {
+                throw FastAiException(FastAiException.RUNWARE_DEVELOP_ERROR_CODE, FastAiException.RUNWARE_DEVELOP_ERROR_MESSAGE)
+            }
 
-            val listImage = data.data
+            userCreditService.update(userId = userId, creditChange = -1)
 
-            val images = mutableListOf<Image>()
+            val images = data.data.map { image ->
+                validateTaskId(taskId, image.taskUUID)
 
-            for (image in listImage) {
-                if (taskId != image.taskUUID) {
-                    throw FastAiException(
-                        FastAiException.RUNWARE_INVALID_TASK_ERROR_CODE,
-                        FastAiException.RUNWARE_INVALID_TASK_ERROR_MESSAGE
-                    )
-                }
+                uploadToS3(image.imageBase64Data, image.imageUUID)
 
-                uploadToS3(image.imageBase64Data , image.imageUUID)
-
-                val addImageResponse = imageService.add(userId = userId,width = null , height = null , path = image.imageUUID , format = "png")
-
-                val imageCopy = addImageResponse.image.copy(
-                    s3Url = s3URL + image.imageUUID + ".png"
+                val addImageResponse = imageService.add(
+                    userId = userId,
+                    width = null,
+                    height = null,
+                    path = image.imageUUID,
+                    format = "png"
                 )
 
-                images.add(imageCopy)
+                addImageResponse.image.copy(
+                    s3Url = "$s3URL/${image.imageUUID}.png"
+                )
             }
 
             RemoveBackgroundImageResponse(images)
@@ -129,28 +122,50 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
         }
     }
 
-    private suspend fun checkUserCredit(userId : Int?){
+    private suspend fun checkUserCredit(userId: Int?) {
         val remainingCredit = userCreditService.getUserCredit(userId)
-
-        if(remainingCredit.userCredit.remaining <= 0){
-            throw FastAiException(FastAiException.RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_CODE,FastAiException.RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_MESSAGE)
+        if (remainingCredit.userCredit.remaining <= 0) {
+            throw FastAiException(FastAiException.RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_CODE, FastAiException.RUNWARE_USER_NOT_ENOUGH_TIME_ERROR_MESSAGE)
         }
     }
 
-    private suspend fun uploadToS3(imgBase64 : String , imgName : String) : String{
-        val bytes = Base64.getDecoder().decode(imgBase64)
+    private suspend fun uploadToS3(imgBase64: String, imgName: String): String {
+        val base64Data = imgBase64.replace("^data:image/\\w+;base64,".toRegex(), "")
+        val bytes = Base64.getDecoder().decode(base64Data)
 
         val tempFile = withContext(Dispatchers.IO) {
-            File.createTempFile("upload-", imgName)
+            File.createTempFile("fast-ai", imgName)
+        }.apply {
+            writeBytes(bytes)
         }
 
-        tempFile.writeBytes(bytes)
-
-        val response = uploadService.uploadFile(tempFile, "images")
-
-        tempFile.delete()
-
+        val response = uploadService.uploadFile(tempFile, "image/png", folder = "images")
+        tempFile.delete() // Clean up the temporary file
 
         return response.url
+    }
+
+    private fun validateGenerateImagesInputs(model: String?, positivePrompt: String?) {
+        if (model.isNullOrEmpty()) {
+            throw FastAiException(
+                FastAiException.RUNWARE_MISSING_MODEL_ERROR_CODE,
+                FastAiException.RUNWARE_MISSING_MODEL_ERROR_MESSAGE
+            )
+        }
+        if (positivePrompt.isNullOrEmpty()) {
+            throw FastAiException(
+                FastAiException.RUNWARE_MISSING_PROMPT_ERROR_CODE,
+                FastAiException.RUNWARE_MISSING_PROMPT_ERROR_MESSAGE
+            )
+        }
+    }
+
+    private fun validateTaskId(expectedTaskId: String, actualTaskId: String) {
+        if (expectedTaskId != actualTaskId) {
+            throw FastAiException(
+                FastAiException.RUNWARE_INVALID_TASK_ERROR_CODE,
+                FastAiException.RUNWARE_INVALID_TASK_ERROR_MESSAGE
+            )
+        }
     }
 }
