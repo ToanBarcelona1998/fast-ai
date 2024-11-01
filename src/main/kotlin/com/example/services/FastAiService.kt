@@ -5,8 +5,10 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.entity.Image
 import com.example.domain.models.requests.ImageTaskRequest
 import com.example.domain.models.requests.RemoveImageBackgroundTaskRequest
+import com.example.domain.models.requests.UpScaleGanTaskRequest
 import com.example.domain.models.responses.GenerateImagesResponse
 import com.example.domain.models.responses.RemoveBackgroundImageResponse
+import com.example.domain.models.responses.UpscaleImageResponse
 import com.example.utils.catchBlockService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -116,9 +118,45 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
         }
     }
 
-    suspend fun upScaleImage(){
+    suspend fun upScaleImage(userID : Int? ,inputImage: String?, upScaleFactor : Int?): UpscaleImageResponse{
         return catchBlockService {
+            checkUserCredit(userID)
 
+            if (inputImage.isNullOrEmpty()) {
+                throw FastAiException(FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE, FastAiException.RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE)
+            }
+
+            var upScaleSize = upScaleFactor ?:2
+
+            if(upScaleSize > 4 || upScaleSize < 2){
+                throw FastAiException(FastAiException.RUNWARE_UP_SCALE_FACTOR_OVER_ERROR_CODE , FastAiException.RUNWARE_UP_SCALE_FACTOR_OVER_ERROR_MESSAGE)
+            }
+
+            val taskId = UUID.randomUUID().toString()
+
+            val request = UpScaleGanTaskRequest(inputImage = inputImage , taskUUID = taskId , upscaleFactor = upScaleSize)
+
+            val data = fastAiClient.upScaleImage(request)
+
+            val images = data.data.map { image ->
+                validateTaskId(taskId, image.taskUUID)
+
+                uploadToS3(image.imageBase64Data, image.imageUUID)
+
+                val addImageResponse = imageService.add(
+                    userId = userID,
+                    width = null,
+                    height = null,
+                    path = image.imageUUID,
+                    format = "png"
+                )
+
+                addImageResponse.image.copy(
+                    s3Url = "$s3URL/${image.imageUUID}.png"
+                )
+            }
+
+            UpscaleImageResponse(images)
         }
     }
 

@@ -87,12 +87,12 @@ data class RemoveImageBackgroundTaskRequest(
     @SerialName("taskUUID") val taskUUID: String,
     @SerialName("outputType") val outputType: String = EOutputType.BASE64.type,
     @SerialName("outputFormat") val outputFormat: String = EOutputFormat.PNG.type,
-    val postProcessMask: Boolean? = null,
-    val returnOnlyMask: Boolean? = null,
-    val alphaMatting: Boolean? = null,
-    val alphaMattingForegroundThreshold: Int? = null,
-    val alphaMattingBackgroundThreshold: Int? = null,
-    val alphaMattingErodeSize: Int? = null,
+    val postProcessMask: Boolean = false,
+    val returnOnlyMask: Boolean = false,
+    val alphaMatting: Boolean = false,
+    val alphaMattingForegroundThreshold: Int = 10,
+    val alphaMattingBackgroundThreshold: Int = 10,
+    val alphaMattingErodeSize: Int = 10,
     val rgba: List<Int>? = null,
 )
 
@@ -103,7 +103,7 @@ data class UpScaleGanTaskRequest(
     @SerialName("taskUUID") val taskUUID: String,
     @SerialName("outputType") val outputType: String = EOutputType.BASE64.type,
     @SerialName("outputFormat") val outputFormat: String = EOutputFormat.PNG.type,
-    val upscaleFactor: Double
+    val upscaleFactor: Int
 )
 
 @Serializable

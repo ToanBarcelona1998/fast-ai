@@ -130,6 +130,22 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     call.parseErrorToRespond(e)
                 }
             }
+
+            post("/image-generator/upscale") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+                    val inputImage = formData["image"]
+                    val scaleFactor = formData["scaleFactor"]?.toInt()
+
+                    val response = userService.upscaleImage(userId = userId , inputImage = inputImage , scaleFactor = scaleFactor)
+
+                    call.parseDataToRespond(response)
+                }catch (e : Exception){
+                    call.parseErrorToRespond(e)
+                }
+            }
         }
     }
 }
