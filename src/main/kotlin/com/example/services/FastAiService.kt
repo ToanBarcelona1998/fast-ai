@@ -19,7 +19,7 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
 
     private val defaultWidth = 512
     private val defaultHeight = 512
-    private val s3URL = "https://$bucketName.s3.amazonaws.com/images/fast-ai"
+    private val s3URL = "https://$bucketName.s3.ap-southeast-2.amazonaws.com/images/"
 
     suspend fun generateImages(
         userId: Int?,
@@ -58,18 +58,18 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
             val images = data.data.map { image ->
                 validateTaskId(taskId, image.taskUUID)
 
-                uploadToS3(image.imageBase64Data, image.imageUUID)
+                val url = uploadToS3(image.imageBase64Data, image.imageUUID)
 
                 val addImageResponse = imageService.add(
                     userId = userId,
                     width = width ?: defaultWidth,
                     height = height ?: defaultHeight,
-                    path = image.imageUUID,
+                    path = url.replaceBefore("/" ,""),
                     format = "png"
                 )
 
                 addImageResponse.image.copy(
-                    s3Url = "$s3URL/${image.imageUUID}.png"
+                    s3Url = url.replaceBefore("/" ,"")
                 )
             }
 
@@ -99,18 +99,18 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
             val images = data.data.map { image ->
                 validateTaskId(taskId, image.taskUUID)
 
-                uploadToS3(image.imageBase64Data, image.imageUUID)
+                val url = uploadToS3(image.imageBase64Data, image.imageUUID)
 
                 val addImageResponse = imageService.add(
                     userId = userId,
                     width = null,
                     height = null,
-                    path = image.imageUUID,
+                    path = url.replaceBefore("/" ,""),
                     format = "png"
                 )
 
                 addImageResponse.image.copy(
-                    s3Url = "$s3URL/${image.imageUUID}.png"
+                    s3Url = url.replaceBefore("/" ,"")
                 )
             }
 
@@ -141,18 +141,18 @@ class FastAiService(private val fastAiClient: FastAiClient, private val uploadSe
             val images = data.data.map { image ->
                 validateTaskId(taskId, image.taskUUID)
 
-                uploadToS3(image.imageBase64Data, image.imageUUID)
+                val url = uploadToS3(image.imageBase64Data, image.imageUUID)
 
                 val addImageResponse = imageService.add(
                     userId = userID,
                     width = null,
                     height = null,
-                    path = image.imageUUID,
+                    path = url.replaceBefore("/" ,""),
                     format = "png"
                 )
 
                 addImageResponse.image.copy(
-                    s3Url = "$s3URL/${image.imageUUID}.png"
+                    s3Url = url.replaceBefore("/" ,"")
                 )
             }
 
