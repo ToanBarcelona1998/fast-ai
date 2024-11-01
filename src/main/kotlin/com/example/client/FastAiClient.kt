@@ -14,12 +14,16 @@ import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-class FastAiClient(private val httpClient: HttpClient,private val fastAIUrl: String) {
+class FastAiClient(private val httpClient: HttpClient,private val fastAIUrl: String , private val fastApiKey : String) {
     private suspend inline fun <reified T, reified R> call(request : R) : T{
         try {
             val response = httpClient.post(fastAIUrl){
                 contentType(ContentType.Application.Json)
                 setBody(request)
+                headers {
+                    append("Authorization" , "Bearer $fastApiKey")
+                    append("Accept" , "application/json")
+                }
             }
 
             return response.body<T>()

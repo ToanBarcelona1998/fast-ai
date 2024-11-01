@@ -4,11 +4,13 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
+import com.example.domain.models.responses.GenerateImagesResponse
 import com.example.domain.models.responses.GetUserResponse
+import com.example.domain.models.responses.RemoveBackgroundImageResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
-class UserService(private val userRepository: IUserRepository) {
+class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService) {
     suspend fun createUser(
         userName: String?,
         gender: Int = 0,
@@ -107,5 +109,13 @@ class UserService(private val userRepository: IUserRepository) {
 
             user.checkStatus()
         }
+    }
+
+    suspend fun generateImages(userId : Int?,width: Int?, height: Int?, model: String?, positivePrompt: String?, number: Int?) : GenerateImagesResponse{
+        return fastAiService.generateImages(userId, width, height, model, positivePrompt, number)
+    }
+
+    suspend fun removeBackgroundImage(userId : Int? , inputImage : String?) : RemoveBackgroundImageResponse{
+        return fastAiService.removeBackground(userId, inputImage)
     }
 }
