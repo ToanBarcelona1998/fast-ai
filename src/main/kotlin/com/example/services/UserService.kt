@@ -111,8 +111,8 @@ class UserService(private val userRepository: IUserRepository, private val fastA
         }
     }
 
-    suspend fun generateImages(userId : Int?,width: Int?, height: Int?, model: String?, positivePrompt: String?, number: Int?) : GenerateImagesResponse{
-        return fastAiService.generateImages(userId, width, height, model, positivePrompt, number)
+    suspend fun generateImages(userId : Int?,width: Int?, height: Int?, model: String?, positivePrompt: String?, number: Int?,negativePrompt : String?) : GenerateImagesResponse{
+        return fastAiService.generateImages(userId, width, height, model, positivePrompt,number = number , negativePrompt = negativePrompt)
     }
 
     suspend fun removeBackgroundImage(userId : Int? , inputImage : String?) : RemoveBackgroundImageResponse{

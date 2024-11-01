@@ -40,7 +40,7 @@ fun Route.uploadRoute(uploadService: UploadService){
                         part.dispose()
                     }
 
-                    val response = uploadService.multiUpload(files,"uploads")
+                    val response = uploadService.multiUpload(files,"uploads" , contentType = "image/png")
 
                     files.forEach{ file->
                         file.delete()

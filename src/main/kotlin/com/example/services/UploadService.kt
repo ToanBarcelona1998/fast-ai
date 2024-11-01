@@ -8,7 +8,7 @@ import com.example.utils.catchBlockService
 import java.io.File
 
 class UploadService (private val awsS3Client: AwsS3Client){
-    suspend fun uploadFile(file : File, folder : String) : UploadFileResponse{
+    suspend fun uploadFile(file : File,contentType : String  ,folder : String) : UploadFileResponse{
         return catchBlockService {
             // Limit to 10 MB
             if(file.length() > 10 * 1024 * 104){
@@ -17,17 +17,17 @@ class UploadService (private val awsS3Client: AwsS3Client){
 
             val key = "$folder/${file.name}"
 
-            val url = awsS3Client.upload(originKey = key)
+            val url = awsS3Client.upload(originKey = key , file = file.readBytes() , uContentType = contentType)
 
             UploadFileResponse(url)
         }
     }
 
-    suspend fun multiUpload(files : List<File> , folder : String) : UploadMultiFileResponse{
+    suspend fun multiUpload(files : List<File> , folder : String , contentType : String ) : UploadMultiFileResponse{
         return catchBlockService {
             val paths = mutableListOf<String>()
             for (file in files){
-                val response = uploadFile(file,folder)
+                val response = uploadFile(file = file,folder = folder, contentType = contentType)
 
                 paths.add(response.url)
             }

@@ -59,4 +59,5 @@ dependencies {
     implementation("aws.sdk.kotlin:s3:$s3Version")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 }
