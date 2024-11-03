@@ -18,24 +18,24 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-val httpClient = HttpClient(CIO){
-    install(HttpTimeout){
+val httpClient = HttpClient(CIO) {
+    install(HttpTimeout) {
         requestTimeoutMillis = 20_000
         connectTimeoutMillis = 20_000
         socketTimeoutMillis = 20_000
     }
-    install(ContentNegotiation){
-        json(Json{
+    install(ContentNegotiation) {
+        json(Json {
             prettyPrint = true
             encodeDefaults = true
             explicitNulls = true
             ignoreUnknownKeys = true
         })
     }
-    install(Logging){
+    install(Logging) {
         level = LogLevel.BODY
 
-        logger = object : Logger{
+        logger = object : Logger {
             override fun log(message: String) {
                 println("KTOR CLIENT LOG:\t $message")
             }
@@ -54,7 +54,7 @@ val injection = module {
         )
     }
 
-    single <HttpClient> { httpClient}
+    single<HttpClient> { httpClient }
 
     // Client
     single<S3Client> { s3Client }
@@ -83,6 +83,8 @@ val injection = module {
     single<IImageGeneratorRepository> { ImageGeneratorRepository() }
 
     single<IPurchaseRepository> { PurchaseRepository() }
+
+    single<IModelRepository> { ModelRepository() }
     //
 
 
@@ -110,7 +112,7 @@ val injection = module {
         PaymentProviderService(get<IPaymentProviderRepository>())
     }
 
-    single<PurchaseService> { PurchaseService(get<IPurchaseRepository>() , get<PackageService>()) }
+    single<PurchaseService> { PurchaseService(get<IPurchaseRepository>(), get<PackageService>()) }
 
     single<UploadService> {
         UploadService(get<AwsS3Client>())
@@ -129,5 +131,7 @@ val injection = module {
     single<UserService> {
         UserService(get<IUserRepository>(), get<FastAiService>())
     }
+
+    single<ModelService> { ModelService(get<IModelRepository>()) }
     //
 }

@@ -136,6 +136,18 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val IMAGE_MISSING_FILE_FOMAT_ERROR_MESSAGE = "Missing file format"
         val IMAGE_MISSING_S3_PATH_ERROR_MESSAGE = "Missing s3 url"
 
+        // Model error code
+        val MODEL_MISSING_MODEL_ERROR_CODE = 1090
+        val MODEL_MISSING_TYPE_ERROR_CODE = 1091
+        val MODEL_MISSING_TAGS_ERROR_CODE = 1092
+        val MODEL_MISSING_THUMB_ERROR_CODE = 1093
+
+        // Model error message
+        val MODEL_MISSING_MODEL_ERROR_MESSAGE = "Missing model code"
+        val MODEL_MISSING_TYPE_ERROR_MESSAGE = "Missing model type"
+        val MODEL_MISSING_TAGS_ERROR_MESSAGE = "Missing model tags"
+        val MODEL_MISSING_THUMB_ERROR_MESSAGE = "Missing model thumbnail"
+
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999
         val DATABASE_ERROR_CODE = 10000
