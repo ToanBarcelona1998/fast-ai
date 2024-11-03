@@ -2,7 +2,7 @@ package com.example.database
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object ImagesTable : Table("images") {
+object ImageTable : Table("images") {
     val id = integer("id").autoIncrement()
     val userId = integer("user_id").references(UserTable.id)
     val s3Url = text("s3_url")

@@ -1,6 +1,6 @@
 package com.example.repository
 
-import com.example.database.ImagesTable
+import com.example.database.ImageTable
 import com.example.domain.models.entity.Image
 import com.example.domain.models.requests.ImageAddRequest
 import com.example.domain.models.requests.Paging
@@ -16,7 +16,7 @@ final class ImageGeneratorRepository : IImageGeneratorRepository {
         return transaction {
             val validPage = if (paging.offset <= 0) 1 else paging.offset
 
-            val totalUserImages = ImagesTable.select(ImagesTable.userId eq userId).count()
+            val totalUserImages = ImageTable.select(ImageTable.userId eq userId).count()
 
             // Check if the requested page is valid based on total images
 
@@ -26,16 +26,16 @@ final class ImageGeneratorRepository : IImageGeneratorRepository {
                 return@transaction emptyList()
             }
 
-            ImagesTable.selectAll().limit(paging.limit, calculateLimit.toLong())
-                .where(ImagesTable.userId eq userId).map {
+            ImageTable.selectAll().limit(paging.limit, calculateLimit.toLong())
+                .where(ImageTable.userId eq userId).map {
                 Image(
-                    id = it[ImagesTable.id],
-                    userId = it[ImagesTable.userId],
-                    height = it[ImagesTable.height],
-                    s3Url = it[ImagesTable.s3Url],
-                    createdAt = it[ImagesTable.createdAt].toString(),
-                    fileFormat = it[ImagesTable.fileFormat],
-                    width = it[ImagesTable.width]
+                    id = it[ImageTable.id],
+                    userId = it[ImageTable.userId],
+                    height = it[ImageTable.height],
+                    s3Url = it[ImageTable.s3Url],
+                    createdAt = it[ImageTable.createdAt].toString(),
+                    fileFormat = it[ImageTable.fileFormat],
+                    width = it[ImageTable.width]
                 )
             }
         }
@@ -45,14 +45,14 @@ final class ImageGeneratorRepository : IImageGeneratorRepository {
         return transaction {
             val now = Clock.System.now()
 
-            val id = ImagesTable.insert {
+            val id = ImageTable.insert {
                 it[createdAt] = now
                 it[userId] = request.userId
                 it[s3Url] = request.s3Url
                 it[height] = request.height
                 it[width] = request.width
                 it[fileFormat] = request.fileFormat
-            }[ImagesTable.id]
+            }[ImageTable.id]
 
             Image(
                 id = id,
