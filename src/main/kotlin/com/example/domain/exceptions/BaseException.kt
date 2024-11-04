@@ -86,7 +86,6 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_CODE = 1095
         val PURCHASE_MISSING_MULTI_REQUEST_ERROR_CODE = 1096
         val PURCHASE_PURCHASE_NOT_FOUND_ERROR_CODE = 1097
-        val PURCHASE_PURCHASE_ALREADY_UPDATE_ERROR_CODE = 1098
 
         // Purchase error message
         val PURCHASE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
@@ -97,7 +96,6 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_MESSAGE = "Transaction status has to be in [pending, completed , failed]"
         val PURCHASE_MISSING_MULTI_REQUEST_ERROR_MESSAGE = "Missing requests"
         val PURCHASE_PURCHASE_NOT_FOUND_ERROR_MESSAGE = "Transaction not found"
-        val PURCHASE_PURCHASE_ALREADY_UPDATE_ERROR_MESSAGE = "Transaction was already updated"
 
 
         // Upload file error code
@@ -163,6 +161,19 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MODEL_MISSING_TYPE_ERROR_MESSAGE = "Missing model type"
         val MODEL_MISSING_TAGS_ERROR_MESSAGE = "Missing model tags"
         val MODEL_MISSING_THUMB_ERROR_MESSAGE = "Missing model thumbnail"
+
+
+        // Transaction error code
+        val TRANSACTION_PURCHASE_ALREADY_UPDATE_ERROR_CODE = 1180
+        val TRANSACTION_MISSING_METHOD_TYPE_ERROR_CODE = 1181
+        val TRANSACTION_MISSING_VERIFY_DATA_ERROR_CODE = 1182
+        val TRANSACTION_METOHD_NOT_ALLOWED_ERROR_CODE = 1183
+
+        // Transaction error message
+        val TRANSACTION_PURCHASE_ALREADY_UPDATE_ERROR_MESSAGE = "Transaction was already updated"
+        val TRANSACTION_MISSING_METHOD_TYPE_ERROR_MESSAGE = "Missing method type"
+        val TRANSACTION_MISSING_VERIFY_DATA_ERROR_MESSAGE = "Missing verify data"
+        val TRANSACTION_METOHD_NOT_ALLOWED_ERROR_MESSAGE = "Method is not allowed"
 
         // Common error code
         val UNKNOWN_ERROR_CODE = 9999

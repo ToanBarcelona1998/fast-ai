@@ -6,9 +6,11 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import com.example.application.config.ApplicationConfig
 import com.example.client.AwsS3Client
 import com.example.client.FastAiClient
+import com.example.client.Web3Client
 import com.example.repository.*
 import com.example.repository.interfaces.*
 import com.example.services.*
+import io.ethers.providers.Provider
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
@@ -54,10 +56,16 @@ val injection = module {
         )
     }
 
+    val web3 = Provider.fromUrl(ApplicationConfig.getWeb3ApiUrl()).unwrap()
+
     single<HttpClient> { httpClient }
+
+    single<Provider> { web3  }
 
     // Client
     single<S3Client> { s3Client }
+
+    single<Web3Client> { Web3Client(get<Provider>())}
 
     single<FastAiClient> {
         FastAiClient(
@@ -129,7 +137,7 @@ val injection = module {
     }
 
     single<UserService> {
-        UserService(get<IUserRepository>(), get<FastAiService>(), get<AITaskService>())
+        UserService(get<IUserRepository>(), get<FastAiService>(), get<AITaskService>() , get<UserCreditService>())
     }
 
     single<ModelService> { ModelService(get<IModelRepository>()) }

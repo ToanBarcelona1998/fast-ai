@@ -9,12 +9,14 @@ val koinVersion : String by project
 val cryptoVersion : String by project
 val envVersion : String by project
 val s3Version : String by project
+val web3Version : String by project
 
 
 plugins {
     kotlin("jvm") version "2.0.20"
     id("io.ktor.plugin") version "3.0.0-rc-1"
     kotlin("plugin.serialization").version("1.9.10")
+    id("io.kriptal.ethers.abigen-plugin") version "1.2.1"
 }
 
 group = "com.example"
@@ -29,6 +31,9 @@ application {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
 }
 
 dependencies {
@@ -60,4 +65,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("io.kriptal.ethers:ethers-providers")
+    implementation(platform("io.kriptal.ethers:ethers-bom:$web3Version"))
+    implementation("io.kriptal.ethers:ethers-core")
 }

@@ -2,13 +2,13 @@ package com.example.services
 
 import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.entity.Purchase
+import com.example.domain.models.entity.PurchaseStatus
 import com.example.domain.models.requests.PurchaseAddRequest
 import com.example.domain.models.requests.PurchaseUpdateRequest
 import com.example.domain.models.requests.PurchaseUpdateRequests
 import com.example.domain.models.responses.CreatePurchaseResponse
 import com.example.repository.interfaces.IPurchaseRepository
 import com.example.utils.catchBlockService
-import com.example.utils.validatePurchaseStatus
 import kotlinx.serialization.json.Json
 
 class PurchaseService(private val purchaseRepository : IPurchaseRepository ,private val packageService: PackageService) {
@@ -49,7 +49,8 @@ class PurchaseService(private val purchaseRepository : IPurchaseRepository ,priv
                 throw FastAiException(FastAiException.PURCHASE_MISSING_STATUS_ERROR_CODE, FastAiException.PURCHASE_MISSING_STATUS_ERROR_MESSAGE)
             }
 
-            if(validatePurchaseStatus(status)){
+
+            if(!PurchaseStatus.isAccessed(status)){
                 throw FastAiException(FastAiException.PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_CODE, FastAiException.PURCHASE_STATUS_NOT_BE_ACCEPTED_ERROR_MESSAGE)
             }
 

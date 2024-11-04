@@ -1,11 +1,11 @@
 package com.example.services
 
 import com.example.domain.exceptions.FastAiException
+import com.example.domain.models.entity.PaymentType
 import com.example.domain.models.requests.PaymentProviderAddRequest
 import com.example.domain.models.responses.GetAllPaymentProviderResponse
 import com.example.repository.interfaces.IPaymentProviderRepository
 import com.example.utils.catchBlockService
-import com.example.utils.validatePaymentMethodType
 
 class PaymentProviderService(private val paymentProviderRepository: IPaymentProviderRepository) {
 
@@ -28,7 +28,11 @@ class PaymentProviderService(private val paymentProviderRepository: IPaymentProv
                 throw FastAiException(FastAiException.PAYMENT_PROVIDER_MISSING_TYPE_ERROR_CODE, FastAiException.PAYMENT_PROVIDER_MISSING_TYPE_ERROR_MESSAGE)
             }
 
-            if(validatePaymentMethodType(type)){
+            val paymentType  = PaymentType.findByType(type)
+
+            val isSupportMethod =  paymentType != null
+
+            if(!isSupportMethod){
                 throw FastAiException(FastAiException.PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_CODE, FastAiException.PAYMENT_PROVIDER_TYPE_NOT_SUPPORT_ERROR_MESSAGE)
             }
 
