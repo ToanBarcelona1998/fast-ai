@@ -4,14 +4,13 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
-import com.example.domain.models.responses.GenerateImagesResponse
+import com.example.domain.models.responses.FastAIResponse
+import com.example.domain.models.responses.GetHistoryTasksResponse
 import com.example.domain.models.responses.GetUserResponse
-import com.example.domain.models.responses.RemoveBackgroundImageResponse
-import com.example.domain.models.responses.UpscaleImageResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
-class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService) {
+class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService, private val taskAiService: AITaskService) {
     suspend fun createUser(
         userName: String?,
         gender: Int = 0,
@@ -77,10 +76,10 @@ class UserService(private val userRepository: IUserRepository, private val fastA
         address: String?,
         birthday: String?,
         status: Int?,
-    ) : Boolean{
+    ): Boolean {
 
         return catchBlockService {
-            if(id == null){
+            if (id == null) {
                 throw FastAiException(
                     FastAiException.USER_MISSING_USER_ID_ERROR_CODE,
                     message = FastAiException.USER_MISSING_USER_ID_ERROR_MESSAGE
@@ -112,15 +111,71 @@ class UserService(private val userRepository: IUserRepository, private val fastA
         }
     }
 
-    suspend fun generateImages(userId : Int?,width: Int?, height: Int?, model: String?, positivePrompt: String?, number: Int?,negativePrompt : String?) : GenerateImagesResponse{
-        return fastAiService.generateImages(userId, width, height, model, positivePrompt,number = number , negativePrompt = negativePrompt)
+    suspend fun generateImages(
+        userId: Int?,
+        width: Int?,
+        height: Int?,
+        model: String?,
+        positivePrompt: String?,
+        number: Int?,
+        negativePrompt: String?,
+        seedImage :String?,
+        maskImage :String?,
+        steps: Int?,
+        strength: Float?,
+        CFGScale: Int?,
+        clipSkip: Int?,
+    ): FastAIResponse {
+        return fastAiService.generateImages(
+            userId,
+            width,
+            height,
+            model,
+            positivePrompt,
+            number = number,
+            negativePrompt = negativePrompt,
+            seedImage = seedImage,
+            maskImage = maskImage,
+            steps = steps,
+            strength = strength,
+            CFGScale = CFGScale,
+            clipSkip = clipSkip,
+        )
     }
 
-    suspend fun removeBackgroundImage(userId : Int? , inputImage : String?) : RemoveBackgroundImageResponse{
+    suspend fun removeBackgroundImage(userId: Int?, inputImage: String?): FastAIResponse {
         return fastAiService.removeBackground(userId, inputImage)
     }
 
-    suspend fun upscaleImage(userId : Int? , inputImage : String?,scaleFactor : Int?) : UpscaleImageResponse{
-        return fastAiService.upScaleImage(userId, inputImage , scaleFactor)
+    suspend fun upscaleImage(userId: Int?, inputImage: String?, scaleFactor: Int?): FastAIResponse {
+        return fastAiService.upScaleImage(userId, inputImage, scaleFactor)
+    }
+
+    suspend fun imageToText(userId: Int?, inputImage: String?): FastAIResponse {
+        return fastAiService.imageToText(userId, inputImage)
+    }
+
+    suspend fun controlNetProcessor(
+        userId: Int?,
+        inputImage: String?,
+        preProcessorType: String?,
+        width: Int?,
+        height: Int?
+    ): FastAIResponse {
+        return fastAiService.controlNetProcessor(
+            userId = userId,
+            inputImage = inputImage,
+            preProcessorType = preProcessorType,
+            width = width,
+            height = height
+        )
+    }
+
+    suspend fun enhancePrompt(userId: Int?, prompt: String? , promptMaxLength : Int?) : FastAIResponse{
+        return fastAiService.enhancePrompt(userId, prompt, promptMaxLength)
+    }
+
+    suspend fun getTasksHistory(userId: Int?, page :Int? , limit : Int?) : GetHistoryTasksResponse{
+        return taskAiService.getHistoryImages(userId,page, limit)
     }
 }

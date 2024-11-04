@@ -99,6 +99,12 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     val positivePrompt = formData["prompt"]
                     val negativePrompt = formData["negativePrompt"]
                     val number = formData["number"]?.toInt()
+                    val CFGScale = formData["CFGScale"]?.toInt()
+                    val steps = formData["steps"]?.toInt()
+                    val clipSkip = formData["steps"]?.toInt()
+                    val strength = formData["strength"]?.toFloat()
+                    val seedImage = formData["seed_image"]
+                    val maskImage = formData["mask_image"]
 
                     val response = userService.generateImages(
                         userId = userId,
@@ -107,7 +113,13 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                         model = model,
                         positivePrompt = positivePrompt,
                         number = number,
-                        negativePrompt = negativePrompt
+                        negativePrompt = negativePrompt,
+                        CFGScale = CFGScale,
+                        strength = strength,
+                        seedImage = seedImage,
+                        maskImage = maskImage,
+                        steps = steps,
+                        clipSkip = clipSkip
                     )
 
                     call.parseDataToRespond(response)
@@ -123,10 +135,10 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     val formData = call.receiveParameters()
                     val inputImage = formData["image"]
 
-                    val response = userService.removeBackgroundImage(userId = userId , inputImage = inputImage)
+                    val response = userService.removeBackgroundImage(userId = userId, inputImage = inputImage)
 
                     call.parseDataToRespond(response)
-                }catch (e : Exception){
+                } catch (e: Exception) {
                     call.parseErrorToRespond(e)
                 }
             }
@@ -139,10 +151,88 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     val inputImage = formData["image"]
                     val scaleFactor = formData["scaleFactor"]?.toInt()
 
-                    val response = userService.upscaleImage(userId = userId , inputImage = inputImage , scaleFactor = scaleFactor)
+                    val response =
+                        userService.upscaleImage(userId = userId, inputImage = inputImage, scaleFactor = scaleFactor)
 
                     call.parseDataToRespond(response)
-                }catch (e : Exception){
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            post("/image-generator/control-net") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+
+                    val inputImage = formData["input_image"]
+                    val preProcessorType = formData["type"]
+                    val width = formData["width"]?.toInt()
+                    val height = formData["height"]?.toInt()
+
+                    val response = userService.controlNetProcessor(
+                        userId = userId,
+                        inputImage = inputImage,
+                        preProcessorType = preProcessorType,
+                        width = width,
+                        height = height
+                    )
+
+                    call.parseDataToRespond(response)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            post("/image-generator/image-to-text") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+
+                    val inputImage = formData["input_image"]
+
+                    val response = userService.imageToText(userId = userId, inputImage = inputImage)
+
+                    call.parseDataToRespond(response)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            post("image-generator/enhance-prompt") {
+                try {
+                    val userId = call.claimId()
+
+                    val formData = call.receiveParameters()
+
+                    val prompt = formData["prompt"]
+                    val promptMaxLength = formData["prompt_max_length"]?.toInt()
+
+                    val response =
+                        userService.enhancePrompt(userId = userId, prompt = prompt, promptMaxLength = promptMaxLength)
+
+                    call.parseDataToRespond(response)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            get("tasks-history") {
+                try{
+                    val userId = call.claimId()
+
+                    val parameter = call.queryParameters
+
+                    val page = parameter["page"]?.toInt()
+
+                    val limit = parameter["page_size"]?.toInt()
+
+                    val response = userService.getTasksHistory(userId = userId , page , limit)
+
+                    call.parseDataToRespond(response)
+                }catch (e: Exception){
                     call.parseErrorToRespond(e)
                 }
             }

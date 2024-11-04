@@ -116,6 +116,14 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val RUNWARE_MISSING_INPUT_IMAGE_ERROR_CODE = 1155
         val RUNWARE_DEVELOP_ERROR_CODE = 1156
         val RUNWARE_UP_SCALE_FACTOR_OVER_ERROR_CODE = 1157
+        val RUNWARE_NOT_SUPPORT_PRE_PROCESSOR_TYPE_ERROR_CODE = 1158
+        val RUNWARE_ENHANCE_PROMPT_OVER_LENGTH_ERROR_CODE = 1159
+        val RUNWATE_CFG_SCALE_OUT_OF_RANGE_ERROR_CODE = 1160
+        val RUNWARE_CLIP_SKIP_OUT_OF_RANGE_ERROR_CODE = 1161
+        val RUNWARE_WIDTH_OUT_OF_RANGE_ERROR_CODE = 1162
+        val RUNWARE_HEIGHT_OUT_OF_RANGE_ERROR_CODE = 1163
+        val RUNWARE_STEPS_OUT_OF_RANGE_ERROR_CODE = 1164
+        val RUNWARE_MISSING_PRE_PROCESSOR_TYPE_ERROR_CODE = 1165
 
         // RunWare error message
         val RUNWARE_MISSING_MODEL_ERROR_MESSAGE = "Missing model"
@@ -125,16 +133,24 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val RUNWARE_MISSING_INPUT_IMAGE_ERROR_MESSAGE = "Missing input image"
         val RUNWARE_DEVELOP_ERROR_MESSAGE = "Develop error"
         val RUNWARE_UP_SCALE_FACTOR_OVER_ERROR_MESSAGE = "Up scale factor must be in range 2 - 4"
+        val RUNWARE_ENHANCE_PROMPT_OVER_LENGTH_ERROR_MESSAGE = "Prompt has a maximum length of 300"
+        val RUNWARE_NOT_SUPPORT_PRE_PROCESSOR_TYPE_ERROR_MESSAGE = "PreProcessorType have to be in [\"canny,depth,mlsd,normalbae,openpose,tile,seg,lineart,lineart_anime,shuffle,scribble,softedge\"]"
+        val RUNWATE_CFG_SCALE_OUT_OF_RANGE_ERROR_MESSAGE = "CFGScale must be between 0 and 30."
+        val RUNWARE_CLIP_SKIP_OUT_OF_RANGE_ERROR_MESSAGE = "ClipSkip must be between 0 and 2."
+        val RUNWARE_WIDTH_OUT_OF_RANGE_ERROR_MESSAGE = "Width must be between 512 and 2048."
+        val RUNWARE_HEIGHT_OUT_OF_RANGE_ERROR_MESSAGE = "Height must be between 512 and 2048."
+        val RUNWARE_STEPS_OUT_OF_RANGE_ERROR_MESSAGE = "Steps must be between 1 and 100."
+        val RUNWARE_MISSING_PRE_PROCESSOR_TYPE_ERROR_MESSAGE = "Missing pre processor type"
 
-        // Image error code
-        val IMAGE_MISSING_USER_ID_ERROR_CODE = 1070
-        val IMAGE_MISSING_FILE_FOMAT_ERROR_CODE = 1071
-        val IMAGE_MISSING_S3_PATH_ERROR_CODE = 1072
+        // Ai task error code
+        val AI_TASK_MISSING_USER_ID_ERROR_CODE = 1070
+        val AI_TASK_MISSING_TASK_TYPE_ERROR_CODE = 1071
+        val AI_TASK_MISSING_DATA_ERROR_CODE = 1072
 
-        // Image error message
-        val IMAGE_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
-        val IMAGE_MISSING_FILE_FOMAT_ERROR_MESSAGE = "Missing file format"
-        val IMAGE_MISSING_S3_PATH_ERROR_MESSAGE = "Missing s3 url"
+        // Ai task error message
+        val AI_TASK_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val AI_TASK_MISSING_TASK_TYPE_ERROR_MESSAGE = "Missing task type"
+        val AI_TASK_MISSING_DATA_ERROR_MESSAGE = "Missing data"
 
         // Model error code
         val MODEL_MISSING_MODEL_ERROR_CODE = 1090

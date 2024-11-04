@@ -80,7 +80,7 @@ val injection = module {
 
     single<IPaymentProviderRepository> { PaymentProviderRepository() }
 
-    single<IImageGeneratorRepository> { ImageGeneratorRepository() }
+    single<IAITaskRepository> { AITaskRepository() }
 
     single<IPurchaseRepository> { PurchaseRepository() }
 
@@ -93,8 +93,8 @@ val injection = module {
         AccountService(get<IAccountRepository>())
     }
 
-    single<ImageService> {
-        ImageService(get<IImageGeneratorRepository>())
+    single<AITaskService> {
+        AITaskService(get<IAITaskRepository>())
     }
 
     single<PackageService> { PackageService(get<IPackageRepository>()) }
@@ -123,7 +123,7 @@ val injection = module {
             get<FastAiClient>(),
             get<UploadService>(),
             get<UserCreditService>(),
-            get<ImageService>(),
+            get<AITaskService>(),
             ApplicationConfig.getS3BucketName()
         )
     }
