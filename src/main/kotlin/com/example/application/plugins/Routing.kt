@@ -25,6 +25,10 @@ fun Application.configureRouting() {
             call.respond(HttpStatusCode.OK , message = BaseResponseError(message = HttpStatusCode.InternalServerError.description , data = null , code = status.value))
         }
 
+        status(HttpStatusCode.BadRequest){ call , status ->
+            call.respond(HttpStatusCode.OK , message = BaseResponseError(message = HttpStatusCode.BadRequest.description , data = null , code = status.value))
+        }
+
     }
 
     // Get service by injection
@@ -33,8 +37,6 @@ fun Application.configureRouting() {
     val userService : UserService by inject()
 
     val packageService : PackageService by inject()
-
-    val userCreditService : UserCreditService by inject()
 
     val paymentProviderService : PaymentProviderService by inject()
 
@@ -45,7 +47,9 @@ fun Application.configureRouting() {
     val modelService : ModelService by inject()
 
     routing {
-        userRoutes(userService,userCreditService , purchaseService)
+        userRoutes(userService)
+        transactionRoutes(purchaseService)
+        imageGeneratorRoutes(userService)
         authRoutes(authService)
         packageRoutes(packageService)
         paymentProviderRoutes(paymentProviderService)

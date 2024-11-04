@@ -129,7 +129,7 @@ val injection = module {
     }
 
     single<UserService> {
-        UserService(get<IUserRepository>(), get<FastAiService>())
+        UserService(get<IUserRepository>(), get<FastAiService>(), get<AITaskService>())
     }
 
     single<ModelService> { ModelService(get<IModelRepository>()) }

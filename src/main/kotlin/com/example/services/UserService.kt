@@ -6,11 +6,12 @@ import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
 import com.example.domain.models.responses.FastAIResponse
 import com.example.domain.models.responses.GetHistoryTasksResponse
+import com.example.domain.models.responses.GetUserCreditResponse
 import com.example.domain.models.responses.GetUserResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
-class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService, private val taskAiService: AITaskService) {
+class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService, private val taskAiService: AITaskService ,private val userCreditService: UserCreditService) {
     suspend fun createUser(
         userName: String?,
         gender: Int = 0,
@@ -177,5 +178,9 @@ class UserService(private val userRepository: IUserRepository, private val fastA
 
     suspend fun getTasksHistory(userId: Int?, page :Int? , limit : Int?) : GetHistoryTasksResponse{
         return taskAiService.getHistoryImages(userId,page, limit)
+    }
+
+    suspend fun getUserCredit(userId: Int?) : GetUserCreditResponse{
+        return userCreditService.getUserCredit(userId)
     }
 }

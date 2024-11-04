@@ -1,6 +1,8 @@
 package com.example.client
 
-class Web3Client {
+import java.net.http.HttpClient
+
+class Web3Client(private val client: HttpClient,private val web3Url : String) {
     suspend fun verifyTxHash(tx : String) : Boolean{
         return true
     }
