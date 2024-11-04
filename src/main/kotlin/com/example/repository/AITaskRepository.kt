@@ -2,6 +2,7 @@ package com.example.repository
 
 import com.example.database.AITaskTable
 import com.example.domain.models.entity.AITask
+import com.example.domain.models.entity.BasePaging
 import com.example.domain.models.requests.AITaskAddRequest
 import com.example.domain.models.requests.Paging
 import com.example.repository.interfaces.IAITaskRepository
@@ -12,31 +13,45 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 final class AITaskRepository : IAITaskRepository {
-    override suspend fun getHistoryTasks(userId: Int, paging: Paging): List<AITask> {
+    override suspend fun getHistoryTasks(userId: Int, paging: Paging): BasePaging<List<AITask>> {
         return transaction {
             val validPage = if (paging.offset <= 0) 1 else paging.offset
 
             val totalUserAITasks = AITaskTable.select(AITaskTable.userId eq userId).count()
 
+            val totalPages = (totalUserAITasks / paging.limit) + if (totalUserAITasks % paging.limit > 0) 1 else 0
+
             // Check if the requested page is valid based on total AITasks
 
             val calculateLimit = (validPage - 1) * paging.offset
-            if ( calculateLimit >= totalUserAITasks) {
+            if (calculateLimit >= totalUserAITasks) {
                 // If the requested page exceeds total AITasks, return an empty list
-                return@transaction emptyList()
-            }
-
-            AITaskTable.selectAll().limit(paging.limit, calculateLimit.toLong())
-                .where(AITaskTable.userId eq userId).map {
-                AITask(
-                    id = it[AITaskTable.id],
-                    userId = it[AITaskTable.userId],
-                    createdAt = it[AITaskTable.createdAt].toString(),
-                    data = it[AITaskTable.data],
-                    taskType = it[AITaskTable.taskType],
-                    rawData = it[AITaskTable.rawData]
+                return@transaction BasePaging(
+                    data = emptyList(),
+                    currentPage = validPage,
+                    pageSize = paging.limit,
+                    totalPages = totalPages
                 )
             }
+
+            val tasks = AITaskTable.selectAll().limit(paging.limit, calculateLimit.toLong())
+                .where(AITaskTable.userId eq userId).map {
+                    AITask(
+                        id = it[AITaskTable.id],
+                        userId = it[AITaskTable.userId],
+                        createdAt = it[AITaskTable.createdAt].toString(),
+                        data = it[AITaskTable.data],
+                        taskType = it[AITaskTable.taskType],
+                        rawData = it[AITaskTable.rawData]
+                    )
+                }
+
+            BasePaging(
+                data = tasks,
+                currentPage = validPage,
+                pageSize = paging.limit,
+                totalPages = totalPages
+            )
         }
     }
 

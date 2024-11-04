@@ -206,6 +206,24 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     call.parseErrorToRespond(e)
                 }
             }
+
+            get("tasks-history") {
+                try{
+                    val userId = call.claimId()
+
+                    val parameter = call.queryParameters
+
+                    val page = parameter["page"]?.toInt()
+
+                    val limit = parameter["page_size"]?.toInt()
+
+                    val response = userService.getTasksHistory(userId = userId , page , limit)
+
+                    call.parseDataToRespond(response)
+                }catch (e: Exception){
+                    call.parseErrorToRespond(e)
+                }
+            }
         }
     }
 }

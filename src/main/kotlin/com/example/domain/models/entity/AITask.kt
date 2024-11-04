@@ -7,7 +7,7 @@ data class AITask(
     val id: Int,
     val userId: Int,
     val data: String,
-    val taskType : String,
-    val rawData : String?,
+    val taskType: String,
+    val rawData: String?,
     val createdAt: String,
 )

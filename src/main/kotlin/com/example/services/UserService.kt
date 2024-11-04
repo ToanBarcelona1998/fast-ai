@@ -5,11 +5,12 @@ import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
 import com.example.domain.models.responses.FastAIResponse
+import com.example.domain.models.responses.GetHistoryTasksResponse
 import com.example.domain.models.responses.GetUserResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 
-class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService) {
+class UserService(private val userRepository: IUserRepository, private val fastAiService: FastAiService, private val taskAiService: AITaskService) {
     suspend fun createUser(
         userName: String?,
         gender: Int = 0,
@@ -160,5 +161,9 @@ class UserService(private val userRepository: IUserRepository, private val fastA
 
     suspend fun enhancePrompt(userId: Int?, prompt: String? , promptMaxLength : Int?) : FastAIResponse{
         return fastAiService.enhancePrompt(userId, prompt, promptMaxLength)
+    }
+
+    suspend fun getTasksHistory(userId: Int?, page :Int? , limit : Int?) : GetHistoryTasksResponse{
+        return taskAiService.getHistoryImages(userId,page, limit)
     }
 }
