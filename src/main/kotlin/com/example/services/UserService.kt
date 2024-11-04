@@ -4,10 +4,7 @@ import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.requests.UserAddRequest
 import com.example.domain.models.requests.UserUpdateRequest
 import com.example.domain.models.entity.User
-import com.example.domain.models.responses.GenerateImagesResponse
 import com.example.domain.models.responses.GetUserResponse
-import com.example.domain.models.responses.RemoveBackgroundImageResponse
-import com.example.domain.models.responses.UpscaleImageResponse
 import com.example.repository.interfaces.IUserRepository
 import com.example.utils.catchBlockService
 

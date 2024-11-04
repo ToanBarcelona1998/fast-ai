@@ -1,13 +1,8 @@
 package com.example.client
 
 import com.example.domain.exceptions.RunWareExceptions
-import com.example.domain.models.entity.FastAIData
-import com.example.domain.models.entity.FastAIImage
-import com.example.domain.models.entity.FastAIImageToText
-import com.example.domain.models.requests.ImageTaskRequest
-import com.example.domain.models.requests.ImageToTextTaskRequest
-import com.example.domain.models.requests.RemoveImageBackgroundTaskRequest
-import com.example.domain.models.requests.UpScaleGanTaskRequest
+import com.example.domain.models.entity.*
+import com.example.domain.models.requests.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -55,5 +50,13 @@ class FastAiClient(private val httpClient: HttpClient,private val fastAIUrl: Str
 
     suspend fun imageToText(request : ImageToTextTaskRequest) : FastAIData<FastAIImageToText>{
         return call<FastAIData<FastAIImageToText>,ImageToTextTaskRequest>(request)
+    }
+
+    suspend fun enhancePrompt(request: EnhancePromptTaskRequest) : FastAIData<FastAIEnhancedPrompt>{
+        return call<FastAIData<FastAIEnhancedPrompt>,EnhancePromptTaskRequest>(request)
+    }
+
+    suspend fun controlNetProcessor(request: ControlNetPreprocessTaskRequest) : FastAIData<FastAIControlNetImage>{
+        return call<FastAIData<FastAIControlNetImage>, ControlNetPreprocessTaskRequest>(request)
     }
 }
