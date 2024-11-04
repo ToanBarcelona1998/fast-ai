@@ -30,8 +30,6 @@ class FastAiClient(private val httpClient: HttpClient,private val fastAIUrl: Str
         }catch (e: ResponseException){
             val errorResponse = e.response.body<RunWareExceptions>()
             throw errorResponse.toBaseException()
-        }finally {
-            httpClient.close()
         }
     }
 
