@@ -3,6 +3,7 @@ package com.example.services
 import com.example.client.Web3Client
 import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.entity.PaymentType
+import com.example.domain.models.responses.CreatePurchaseResponse
 import com.example.utils.catchBlockService
 
 class TransactionService(
@@ -10,7 +11,11 @@ class TransactionService(
     private val userCreditService: UserCreditService,
     private val web3Client: Web3Client
 ) {
-    suspend fun completeTransaction(id: Int?, userId : Int,data : String?,type : String?): Boolean {
+    suspend fun createTransaction(userId : Int? , methodId : Int? , packageId : Int?) : CreatePurchaseResponse {
+        return purchaseService.createTransaction(userId, methodId, packageId)
+    }
+
+    suspend fun completeTransaction(id: Int?, userId : Int?, type : String? ,data : String?): Boolean {
         return catchBlockService {
 
             // Get current transaction by id
@@ -67,7 +72,7 @@ class TransactionService(
         }
     }
 
-    suspend fun completeMultiTransaction(){
+    suspend fun completeMultiTransaction(id: Int?, userId : Int, type : String? ,data : String?){
 
     }
 

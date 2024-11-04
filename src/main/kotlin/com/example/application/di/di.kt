@@ -141,5 +141,7 @@ val injection = module {
     }
 
     single<ModelService> { ModelService(get<IModelRepository>()) }
+
+    single<TransactionService> { TransactionService(get<PurchaseService>(), get<UserCreditService>() , get<Web3Client>()) }
     //
 }

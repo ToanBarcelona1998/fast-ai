@@ -1,6 +1,6 @@
 package com.example.routes
 
-import com.example.services.PurchaseService
+import com.example.services.TransactionService
 import com.example.utils.claimId
 import com.example.utils.parseDataToRespond
 import com.example.utils.parseErrorToRespond
@@ -8,14 +8,14 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
-fun Route.transactionRoutes(purchaseService: PurchaseService) {
+fun Route.transactionRoutes(transactionService: TransactionService) {
     route("/transaction") {
         authenticate {
             post("/create-transaction") {
                 try {
                     val userId = call.claimId()
                     val formData = call.receiveParameters()
-                    val response = purchaseService.createTransaction(
+                    val response = transactionService.createTransaction(
                         userId = userId,
                         methodId = formData["method_id"]?.toInt(),
                         packageId = formData["package_id"]?.toInt()
@@ -29,7 +29,13 @@ fun Route.transactionRoutes(purchaseService: PurchaseService) {
             post("/complete-transaction") {
                 try {
                     val userId = call.claimId()
+
                     val formData = call.receiveParameters()
+                    val id = formData["transaction_id"]?.toInt()
+                    val paymentType = formData["payment_type"]
+                    val data = formData["verify_data"]
+
+                    transactionService.completeTransaction(userId = userId , id =  id , type = paymentType , data = data)
 
                 } catch (e: Exception) {
                     call.parseErrorToRespond(e)
