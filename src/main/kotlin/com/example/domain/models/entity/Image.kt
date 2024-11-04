@@ -3,12 +3,11 @@ package com.example.domain.models.entity
 import kotlinx.serialization.*
 
 @Serializable
-data class Image(
+data class AITask(
     val id: Int,
     val userId: Int,
-    val s3Url: String,
-    val width: Int?,
-    val height: Int?,
-    val fileFormat: String,
+    val data: String,
+    val taskType : String,
+    val rawData : String?,
     val createdAt: String,
 )
