@@ -29,7 +29,37 @@ class FastAiService(
         model: String?,
         positivePrompt: String?,
         negativePrompt: String? = null,
-        number: Int? = 1
+        number: Int? = 1,
+        //When doing Image-to-Image, in painting or out painting, this parameter is required.
+        //
+        //Specifies the seed image to be used for the diffusion process. The image can be specified in one of the following formats:
+        //
+        //An UUID v4 string of a previously uploaded image or a generated image.
+        //A data URI string representing the image. The data URI must be in the format data:<mediaType>;base64, followed by the base64-encoded image. For example: data:image/png;base64,iVBORw0KGgo....
+        //A base64 encoded image without the data URI prefix. For example: iVBORw0KGgo....
+        //A URL pointing to the image. The image must be accessible publicly.
+        //Supported formats are: PNG, JPG and WEBP.
+        seedImage: String?,
+        //When doing in painting or out painting, this parameter is required.
+        //
+        //Specifies the mask image to be used for the in painting process. The image can be specified in one of the following formats:
+        //
+        //An UUID v4 string of a previously uploaded image or a generated image.
+        //A data URI string representing the image. The data URI must be in the format data:<mediaType>;base64, followed by the base64-encoded image. For example: data:image/png;base64,iVBORw0KGgo....
+        //A base64 encoded image without the data URI prefix. For example: iVBORw0KGgo....
+        //A URL pointing to the image. The image must be accessible publicly.
+        //Supported formats are: PNG, JPG and WEBP.
+        maskImage : String?,
+        //The number of steps is the number of iterations the model will perform to generate the image.
+        // The higher the number of steps, the more detailed the image will be. However, increasing the number of steps will also increase the time it takes to generate the image and may not always result in a better image (some schedulers work differently).
+        //
+        //When using your own models you can specify a new default value for the number of steps.
+        steps: Int?,
+        CFGScale : Int?,
+        clipSkip : Int?,
+        //When doing Image-to-Image, in painting or out painting, this parameter is used to determine the influence of the seedImage image in the generated output.
+        // A higher value results in more influence from the original image, while a lower value allows more creative deviation.
+        strength : Float?
     ): FastAIResponse {
         return catchBlockService {
             validateGenerateImagesInputs(model, positivePrompt)
@@ -45,7 +75,13 @@ class FastAiService(
                 width = width ?: defaultWidth,
                 height = height ?: defaultHeight,
                 numberResults = number ?: 1,
-                negativePrompt = negativePrompt
+                negativePrompt = negativePrompt,
+                CFGScale = CFGScale ?: 7,
+                seedImage = seedImage,
+                maskImage = maskImage,
+                steps = steps ?: 20,
+                clipSkip = clipSkip ?: 0,
+                strength = strength
             )
 
             request.validate()

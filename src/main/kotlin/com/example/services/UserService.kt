@@ -118,7 +118,13 @@ class UserService(private val userRepository: IUserRepository, private val fastA
         model: String?,
         positivePrompt: String?,
         number: Int?,
-        negativePrompt: String?
+        negativePrompt: String?,
+        seedImage :String?,
+        maskImage :String?,
+        steps: Int?,
+        strength: Float?,
+        CFGScale: Int?,
+        clipSkip: Int?,
     ): FastAIResponse {
         return fastAiService.generateImages(
             userId,
@@ -127,7 +133,13 @@ class UserService(private val userRepository: IUserRepository, private val fastA
             model,
             positivePrompt,
             number = number,
-            negativePrompt = negativePrompt
+            negativePrompt = negativePrompt,
+            seedImage = seedImage,
+            maskImage = maskImage,
+            steps = steps,
+            strength = strength,
+            CFGScale = CFGScale,
+            clipSkip = clipSkip,
         )
     }
 

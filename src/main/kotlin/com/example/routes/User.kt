@@ -99,6 +99,12 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                     val positivePrompt = formData["prompt"]
                     val negativePrompt = formData["negativePrompt"]
                     val number = formData["number"]?.toInt()
+                    val CFGScale = formData["CFGScale"]?.toInt()
+                    val steps = formData["steps"]?.toInt()
+                    val clipSkip = formData["steps"]?.toInt()
+                    val strength = formData["strength"]?.toFloat()
+                    val seedImage = formData["seed_image"]
+                    val maskImage = formData["mask_image"]
 
                     val response = userService.generateImages(
                         userId = userId,
@@ -107,7 +113,13 @@ fun Route.userRoutes(userService: UserService, userCreditService: UserCreditServ
                         model = model,
                         positivePrompt = positivePrompt,
                         number = number,
-                        negativePrompt = negativePrompt
+                        negativePrompt = negativePrompt,
+                        CFGScale = CFGScale,
+                        strength = strength,
+                        seedImage = seedImage,
+                        maskImage = maskImage,
+                        steps = steps,
+                        clipSkip = clipSkip
                     )
 
                     call.parseDataToRespond(response)
