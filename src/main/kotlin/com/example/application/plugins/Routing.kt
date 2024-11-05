@@ -46,9 +46,11 @@ fun Application.configureRouting() {
 
     val modelService : ModelService by inject()
 
+    val transactionService : TransactionService by inject()
+
     routing {
         userRoutes(userService)
-        transactionRoutes(purchaseService)
+        transactionRoutes(transactionService)
         imageGeneratorRoutes(userService)
         authRoutes(authService)
         packageRoutes(packageService)

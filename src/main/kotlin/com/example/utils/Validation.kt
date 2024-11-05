@@ -6,15 +6,3 @@ fun validateEmail(email : String) : Boolean{
     )
     return emailRegex.matches(email)
 }
-
-fun validatePurchaseStatus(status: String) : Boolean{
-    val allowStatus = listOf("pending","completed" , "failed")
-
-    return allowStatus.contains(status)
-}
-
-fun validatePaymentMethodType(type : String) : Boolean{
-    val allowType = listOf("web3" , "google" , "apple")
-
-    return allowType.contains(type)
-}
