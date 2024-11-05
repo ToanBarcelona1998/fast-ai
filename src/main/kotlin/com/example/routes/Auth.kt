@@ -16,7 +16,7 @@ fun Route.authRoutes(authService: AuthService){
             val password = formData["password"]
 
             try{
-                val loginResponse = authService.login(email = userName!! , password = password!!)
+                val loginResponse = authService.login(email = userName , password = password)
 
                 call.parseDataToRespond(loginResponse)
             }catch (e : Exception){
