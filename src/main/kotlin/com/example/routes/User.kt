@@ -8,9 +8,39 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
+private suspend inline fun update(call : RoutingCall , userService: UserService){
+    try {
+        val id = call.claimId()
+
+        val formData = call.receiveParameters()
+
+        val userName = formData["user_name"]
+        val phoneNumber = formData["phone_number"]
+        val birthday = formData["birthday"]
+        val address = formData["address"]
+        val avatar = formData["avatar"]
+        val status = formData["status"]?.toInt()
+        val gender = formData["gender"]?.toInt()
+
+        userService.update(
+            id = id,
+            userName = userName,
+            phoneNumber = phoneNumber,
+            gender = gender,
+            birthday = birthday,
+            address = address,
+            avatar = avatar,
+            status = status
+        )
+
+    } catch (e: Exception) {
+        call.parseErrorToRespond(e)
+    }
+}
+
 fun Route.userRoutes(userService: UserService) {
     route("/user") {
-        authenticate {
+        authenticate("auth-jwt") {
             get {
                 try {
                     val id = call.claimId()
@@ -24,33 +54,7 @@ fun Route.userRoutes(userService: UserService) {
             }
 
             put {
-                try {
-                    val id = call.claimId()
-
-                    val formData = call.receiveParameters()
-
-                    val userName = formData["user_name"]
-                    val phoneNumber = formData["phone_number"]
-                    val birthday = formData["birthday"]
-                    val address = formData["address"]
-                    val avatar = formData["avatar"]
-                    val status = formData["status"]?.toInt()
-                    val gender = formData["gender"]?.toInt()
-
-                    userService.update(
-                        id = id,
-                        userName = userName,
-                        phoneNumber = phoneNumber,
-                        gender = gender,
-                        birthday = birthday,
-                        address = address,
-                        avatar = avatar,
-                        status = status
-                    )
-
-                } catch (e: Exception) {
-                    call.parseErrorToRespond(e)
-                }
+                update(call,userService)
             }
 
             get("/credits") {
@@ -81,6 +85,12 @@ fun Route.userRoutes(userService: UserService) {
                 }catch (e: Exception){
                     call.parseErrorToRespond(e)
                 }
+            }
+        }
+
+        authenticate("onboarding-auth") {
+            put {
+                update(call,userService)
             }
         }
     }

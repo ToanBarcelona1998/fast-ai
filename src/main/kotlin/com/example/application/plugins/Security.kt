@@ -9,7 +9,7 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureSecurity() {
     install(Authentication){
-        jwt {
+        jwt("auth-jwt") {
             realm = "ktor.io"
             verifier(JWTConfig.verifier)
             validate { jwtCredential ->
@@ -26,6 +26,26 @@ fun Application.configureSecurity() {
                     }
                 }
 
+                return@validate null
+            }
+        }
+
+        jwt("onboarding-auth") {
+            realm = "ktor.io"
+            verifier(JWTConfig.verifier)
+            validate { jwtCredential ->
+                val id = jwtCredential.payload.getClaim("id").asInt()
+                val scope = jwtCredential.payload.getClaim("scope").asString()
+
+                if (id != null && scope == "onboarding") {
+                    try {
+                        val userService by inject<UserService>()
+                        userService.getUserById(id)
+                        return@validate JWTPrincipal(jwtCredential.payload)
+                    } catch (e: Exception) {
+                        return@validate null
+                    }
+                }
                 return@validate null
             }
         }

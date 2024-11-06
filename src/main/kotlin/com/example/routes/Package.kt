@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 fun Route.packageRoutes(packageService: PackageService){
     route("/packages"){
-        authenticate {
+        authenticate("auth-jwt") {
             get("/") {
                 try{
                     val getAllPackagesResponse = packageService.getAll()
