@@ -34,7 +34,7 @@ final class AuthService(private val accountService: AccountService ,private val 
 
             val user = userService.getUserByAccountId(account.id)
 
-            val accessToken = JWTConfig.makeJWTToken(user.id)
+            val accessToken = JWTConfig.makeOnBoardingJWTToken(user.id)
 
             LoginResponse(accessToken)
         }

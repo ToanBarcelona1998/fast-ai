@@ -10,7 +10,7 @@ import io.ktor.server.routing.*
 
 fun Route.imageGeneratorRoutes(userService: UserService) {
     route("/image-generator") {
-        authenticate {
+        authenticate("auth-jwt") {
             post("/generate-images") {
                 try {
                     val userId = call.claimId()

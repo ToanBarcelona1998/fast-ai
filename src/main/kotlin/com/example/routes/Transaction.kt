@@ -10,7 +10,7 @@ import io.ktor.server.routing.*
 
 fun Route.transactionRoutes(transactionService: TransactionService) {
     route("/transaction") {
-        authenticate {
+        authenticate("auth-jwt") {
             post("/create-transaction") {
                 try {
                     val userId = call.claimId()

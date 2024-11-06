@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 
 fun Route.modelRoute(modelService: ModelService){
     route("/model"){
-        authenticate {
+        authenticate("auth-jwt") {
             post {
                 try {
                     val formData = call.receiveParameters()
