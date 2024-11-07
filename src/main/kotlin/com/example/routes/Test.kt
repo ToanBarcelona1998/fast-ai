@@ -6,7 +6,7 @@ import io.ktor.server.routing.*
 
 fun Route.test(){
     route("/"){
-        authenticate {
+        authenticate("auth-jwt") {
             get("test") {
                 call.respondText("Hello")
             }

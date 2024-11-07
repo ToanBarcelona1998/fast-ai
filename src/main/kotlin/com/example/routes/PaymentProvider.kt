@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 
 fun Route.paymentProviderRoutes(paymentProviderService: PaymentProviderService){
     route("/payment-provider"){
-        authenticate {
+        authenticate("auth-jwt") {
             get("/") {
                 try {
                     val response = paymentProviderService.getAll()
