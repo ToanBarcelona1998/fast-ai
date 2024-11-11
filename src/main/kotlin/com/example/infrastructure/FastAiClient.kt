@@ -1,4 +1,4 @@
-package com.example.client
+package com.example.infrastructure
 
 import com.example.domain.exceptions.RunWareExceptions
 import com.example.domain.models.entity.*

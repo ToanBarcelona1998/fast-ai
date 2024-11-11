@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.client.AwsS3Client
+import com.example.infrastructure.AwsS3Client
 import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.responses.UploadFileResponse
 import com.example.domain.models.responses.UploadMultiFileResponse
