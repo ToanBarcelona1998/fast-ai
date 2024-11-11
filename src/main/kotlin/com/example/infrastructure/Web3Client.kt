@@ -1,4 +1,4 @@
-package com.example.client
+package com.example.infrastructure
 
 import io.ethers.core.types.Hash
 import io.ethers.providers.Provider

@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.client.Web3Client
+import com.example.infrastructure.Web3Client
 import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.entity.PaymentType
 import com.example.domain.models.responses.CreatePurchaseResponse

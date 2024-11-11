@@ -4,9 +4,9 @@ import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import com.example.application.config.ApplicationConfig
-import com.example.client.AwsS3Client
-import com.example.client.FastAiClient
-import com.example.client.Web3Client
+import com.example.infrastructure.AwsS3Client
+import com.example.infrastructure.FastAiClient
+import com.example.infrastructure.Web3Client
 import com.example.repository.*
 import com.example.repository.interfaces.*
 import com.example.services.*

@@ -1,4 +1,4 @@
-package com.example.client
+package com.example.infrastructure
 
 import io.ktor.client.*
 import io.ktor.client.request.*

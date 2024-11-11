@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.client.FastAiClient
+import com.example.infrastructure.FastAiClient
 import com.example.domain.exceptions.FastAiException
 import com.example.domain.models.requests.*
 import com.example.domain.models.responses.FastAIResponse
