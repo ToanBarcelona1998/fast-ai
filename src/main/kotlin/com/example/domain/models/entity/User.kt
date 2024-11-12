@@ -48,14 +48,18 @@ data class User(
 
         when (status) {
             0 -> {
+                throw FastAiException(FastAiException.USER_ON_WATING_VERIFY_ERROR_CODE,FastAiException.USER_ON_WATING_VERIFY_ERROR_MESSAGE)
+            }
+
+            1 -> {
                 throw FastAiException(FastAiException.USER_ON_BOARDING_STATUS_ERROR_CODE,FastAiException.USER_ON_BOARDING_STATUS_ERROR_MESSAGE)
             }
 
-            2 -> {
+            3 -> {
                 throw FastAiException(FastAiException.USER_ON_BLOCKING_STATUS_ERROR_CODE,FastAiException.USER_ON_BLOCKING_STATUS_ERROR_MESSAGE)
             }
 
-            3 -> {
+            4 -> {
                 throw FastAiException(FastAiException.USER_ON_DELETING_STATUS_ERROR_CODE,FastAiException.USER_ON_DELETING_STATUS_ERROR_MESSAGE)
             }
 
