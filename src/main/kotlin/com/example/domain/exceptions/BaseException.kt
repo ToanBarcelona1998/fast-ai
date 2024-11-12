@@ -14,6 +14,8 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MISSING_OTP_ERROR_CODE = 1006
         val OTP_IN_CORRECT_ERROR_CODE = 1007
         val OTP_EXPIRED_ERROR_CODE = 1008
+        val MISSING_REFRESH_TOKEN_ERROR_CODE = 1009
+        val REFRESH_TOKEN_EXPIRED_TOKEN_ERROR_CODE = 1010
 
         // Auth error message
         val MISSING_EMAIL_ERROR_MESSAGE = "Missing email"
@@ -25,6 +27,8 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val MISSING_OTP_ERROR_MESSAGE = "Missing otp code"
         val OTP_IN_CORRECT_ERROR_MESSAGE = "Otp is incorrect"
         val OTP_EXPIRED_ERROR_MESSAGE = "Otp was expired"
+        val MISSING_REFRESH_TOKEN_ERROR_MESSAGE = "Missing refresh token"
+        val REFRESH_TOKEN_EXPIRED_TOKEN_ERROR_MESSAGE = "Refresh token was expired"
 
         // User error code from 1010 -
         val MISSING_USER_NAME_ERROR_CODE = 1010
