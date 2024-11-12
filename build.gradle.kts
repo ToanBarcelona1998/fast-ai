@@ -10,6 +10,7 @@ val cryptoVersion : String by project
 val envVersion : String by project
 val s3Version : String by project
 val web3Version : String by project
+val mailerVersion : String by project
 
 
 plugins {
@@ -68,4 +69,5 @@ dependencies {
     implementation("io.kriptal.ethers:ethers-providers")
     implementation(platform("io.kriptal.ethers:ethers-bom:$web3Version"))
     implementation("io.kriptal.ethers:ethers-core")
+    implementation("org.simplejavamail:simple-java-mail:$mailerVersion")
 }
