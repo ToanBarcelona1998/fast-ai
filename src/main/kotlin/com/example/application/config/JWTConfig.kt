@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.Claim
 import java.util.*
 
 object JWTConfig {
@@ -30,6 +31,7 @@ object JWTConfig {
 
     fun makeJWTRefreshToken(userId: Int): String {
         return makeJWT(userId, DATETIME * 30)
+            .withClaim("scope" , "refresh")
             .sign(algorithm)
     }
 
@@ -39,9 +41,13 @@ object JWTConfig {
             .sign(algorithm)
     }
 
-    fun makeOnBoardingJWTRefreshToken(userId: Int): String {
-        return makeJWT(userId, DATETIME * 30)
-            .withClaim("scope", "onboarding")
-            .sign(algorithm)
+    fun getClaims(token : String) : Map<String, Claim>?{
+        try{
+            val decode = verifier.verify(token)
+
+            return decode.claims
+        }catch (e: Exception){
+            return null
+        }
     }
 }
