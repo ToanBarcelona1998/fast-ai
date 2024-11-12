@@ -11,6 +11,9 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val ACCOUNT_EXISTS_ERROR_CODE = 1003
         val ACCOUNT_NOT_EXISTS_ERROR_CODE = 1004
         val INCORRECT_PASSWORD_ERROR_CODE = 1005
+        val MISSING_OTP_ERROR_CODE = 1006
+        val OTP_IN_CORRECT_ERROR_CODE = 1007
+        val OTP_EXPIRED_ERROR_CODE = 1008
 
         // Auth error message
         val MISSING_EMAIL_ERROR_MESSAGE = "Missing email"
@@ -19,21 +22,26 @@ class FastAiException(val code: Int, override val message: String) : Exception(m
         val ACCOUNT_EXISTS_ERROR_MESSAGE = "Account is exists"
         val ACCOUNT_NOT_EXISTS_ERROR_MESSAGE = "Account is not exists"
         val INCORRECT_PASSWORD_ERROR_MESSAGE = "Password is not correct"
+        val MISSING_OTP_ERROR_MESSAGE = "Missing otp code"
+        val OTP_IN_CORRECT_ERROR_MESSAGE = "Otp is incorrect"
+        val OTP_EXPIRED_ERROR_MESSAGE = "Otp was expired"
 
         // User error code from 1010 -
         val MISSING_USER_NAME_ERROR_CODE = 1010
         val USER_NOT_FOUND_ERROR_CODE = 1011
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_CODE = 1012
         val USER_MISSING_USER_ID_ERROR_CODE = 1013
-        val USER_ON_BOARDING_STATUS_ERROR_CODE = 1014
-        val USER_ON_BLOCKING_STATUS_ERROR_CODE = 1015
-        val USER_ON_DELETING_STATUS_ERROR_CODE = 1015
+        val USER_ON_WATING_VERIFY_ERROR_CODE = 1014
+        val USER_ON_BOARDING_STATUS_ERROR_CODE = 1015
+        val USER_ON_BLOCKING_STATUS_ERROR_CODE = 1016
+        val USER_ON_DELETING_STATUS_ERROR_CODE = 1017
 
         // User error message
         val MISSING_USER_NAME_ERROR_MESSAGE = "Missing user name"
         val USER_NOT_FOUND_ERROR_MESSAGE = "User not found"
         val USER_BY_ACCOUNT_ID_NOT_FOUND_ERROR_MESSAGE = "User not found"
         val USER_MISSING_USER_ID_ERROR_MESSAGE = "Missing user id"
+        val USER_ON_WATING_VERIFY_ERROR_MESSAGE = "Account is not verified"
         val USER_ON_BOARDING_STATUS_ERROR_MESSAGE = "Account doesn't complete onboarding steps"
         val USER_ON_BLOCKING_STATUS_ERROR_MESSAGE = "Account is in blocking time"
         val USER_ON_DELETING_STATUS_ERROR_MESSAGE = "Account was deleted"
