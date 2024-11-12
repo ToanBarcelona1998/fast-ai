@@ -24,7 +24,7 @@ object JWTConfig {
     }
 
     fun makeJWTToken(userId: Int): String {
-        return makeJWT(userId, DATETIME)
+        return makeJWT(userId, DATETIME * 7)
             .sign(algorithm)
     }
 
