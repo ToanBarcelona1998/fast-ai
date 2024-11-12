@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureHTTP()
+    cleanUpOtpTask()
     configDb()
     configContentNegotiation()
     configureMonitoring()
