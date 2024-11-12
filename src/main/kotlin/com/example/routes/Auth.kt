@@ -55,56 +55,6 @@ fun Route.authRoutes(authService: AuthService) {
             }
         }
 
-        post("/register/verify-email") {
-            val formData = call.receiveParameters()
-
-            val otpCode = formData["otp"]
-
-            val email = formData["email"]
-
-            try {
-                val status = authService.registerVerifyEmail(otpCode, email)
-
-                call.parseDataToRespond(status)
-            } catch (e: Exception) {
-                call.parseErrorToRespond(e)
-            }
-        }
-
-        post("/register/complete-profile") {
-            val formData = call.receiveParameters()
-
-            val userId = call.claimId()
-
-            val userName = formData["user_name"]
-
-            val avatar = formData["avatar"]
-
-            val gender = formData["gender"]?.toInt()
-
-            val address = formData["address"]
-
-            val birthday = formData["birthday"]
-
-            val phoneNumber = formData["phone_number"]
-
-            try {
-                val status = authService.registerCompleteProfile(
-                    id = userId,
-                    userName = userName,
-                    avatar = avatar,
-                    gender = gender,
-                    address = address,
-                    birthday = birthday,
-                    phoneNumber = phoneNumber
-                )
-
-                call.parseDataToRespond(status)
-            } catch (e: Exception) {
-                call.parseErrorToRespond(e)
-            }
-        }
-
         post("/refresh-token") {
             val formData = call.receiveParameters()
 
@@ -116,6 +66,58 @@ fun Route.authRoutes(authService: AuthService) {
                 call.parseDataToRespond(response)
             } catch (e: Exception) {
                 call.parseErrorToRespond(e)
+            }
+        }
+
+        authenticate("onboarding-auth") {
+            post("/register/verify-email") {
+                val formData = call.receiveParameters()
+
+                val otpCode = formData["otp"]
+
+                val email = formData["email"]
+
+                try {
+                    val status = authService.registerVerifyEmail(otpCode, email)
+
+                    call.parseDataToRespond(status)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
+            }
+
+            post("/register/complete-profile") {
+                val formData = call.receiveParameters()
+
+                val userId = call.claimId()
+
+                val userName = formData["user_name"]
+
+                val avatar = formData["avatar"]
+
+                val gender = formData["gender"]?.toInt()
+
+                val address = formData["address"]
+
+                val birthday = formData["birthday"]
+
+                val phoneNumber = formData["phone_number"]
+
+                try {
+                    val status = authService.registerCompleteProfile(
+                        id = userId,
+                        userName = userName,
+                        avatar = avatar,
+                        gender = gender,
+                        address = address,
+                        birthday = birthday,
+                        phoneNumber = phoneNumber
+                    )
+
+                    call.parseDataToRespond(status)
+                } catch (e: Exception) {
+                    call.parseErrorToRespond(e)
+                }
             }
         }
     }
