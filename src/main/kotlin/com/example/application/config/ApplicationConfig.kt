@@ -24,6 +24,7 @@ object ApplicationConfig {
     private val S3_ACCESS_KEY = "S3_ACCESS_KEY"
     private val S3_REGION = "S3_REGION"
     private val S3_BUCKET_NAME = "S3_BUCKET_NAME"
+    private val SMTP_EMAIL = "SMTP_EMAIL"
 
     private val dotenv = Dotenv.configure().filename(".env.${environment.config}").load()
 
@@ -78,5 +79,9 @@ object ApplicationConfig {
 
     fun getS3BucketName(): String {
         return System.getenv(S3_BUCKET_NAME) ?: dotenv[S3_BUCKET_NAME]
+    }
+
+    fun getSmtpEmail() : String{
+        return System.getenv(SMTP_EMAIL) ?: dotenv[SMTP_EMAIL]
     }
 }
