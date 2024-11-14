@@ -9,7 +9,7 @@ final class EmailClient(private val mailer: Mailer) {
             val email = EmailBuilder
                 .startingBlank()
                 .from(from)
-                .to(to)
+                .to(to,)
                 .withSubject(subject)
                 .withPlainText(content)
                 .buildEmail()

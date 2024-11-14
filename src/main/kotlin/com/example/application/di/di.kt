@@ -5,6 +5,7 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import com.example.application.config.ApplicationConfig
 import com.example.infrastructure.AwsS3Client
+import com.example.infrastructure.EmailClient
 import com.example.infrastructure.FastAiClient
 import com.example.infrastructure.Web3Client
 import com.example.repository.*
@@ -19,6 +20,10 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
+import org.simplejavamail.api.mailer.Mailer
+import org.simplejavamail.api.mailer.config.TransportStrategy
+import org.simplejavamail.mailer.MailerBuilder
+import org.simplejavamail.mailer.internal.MailerImpl
 
 val httpClient = HttpClient(CIO) {
     install(HttpTimeout) {
@@ -60,12 +65,12 @@ val injection = module {
 
     single<HttpClient> { httpClient }
 
-    single<Provider> { web3  }
+    single<Provider> { web3 }
 
     // Client
     single<S3Client> { s3Client }
 
-    single<Web3Client> { Web3Client(get<Provider>())}
+    single<Web3Client> { Web3Client(get<Provider>()) }
 
     single<FastAiClient> {
         FastAiClient(
@@ -76,6 +81,16 @@ val injection = module {
     }
 
     single<AwsS3Client> { AwsS3Client(get<S3Client>(), ApplicationConfig.getS3BucketName()) }
+
+    val mailer = MailerBuilder
+        .withSMTPServer(
+            ApplicationConfig.getSmtpHost(),
+            ApplicationConfig.getSmtpPort(),
+        )
+        .withTransportStrategy(TransportStrategy.SMTP)
+        .buildMailer()
+
+    single<EmailClient> { EmailClient(mailer) }
 
     // Repository
     single<IAccountRepository> { AccountRepository() }
@@ -108,7 +123,7 @@ val injection = module {
     single<PackageService> { PackageService(get<IPackageRepository>()) }
 
     single<AuthService> {
-        AuthService(get<AccountService>(), get<UserService>())
+        AuthService(get<AccountService>(), get<UserService>(), get<EmailClient>())
     }
 
     single<UserCreditService> {
@@ -137,11 +152,17 @@ val injection = module {
     }
 
     single<UserService> {
-        UserService(get<IUserRepository>(), get<FastAiService>(), get<AITaskService>() , get<UserCreditService>())
+        UserService(get<IUserRepository>(), get<FastAiService>(), get<AITaskService>(), get<UserCreditService>())
     }
 
     single<ModelService> { ModelService(get<IModelRepository>()) }
 
-    single<TransactionService> { TransactionService(get<PurchaseService>(), get<UserCreditService>() , get<Web3Client>()) }
+    single<TransactionService> {
+        TransactionService(
+            get<PurchaseService>(),
+            get<UserCreditService>(),
+            get<Web3Client>()
+        )
+    }
     //
 }
