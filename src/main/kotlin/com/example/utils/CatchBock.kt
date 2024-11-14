@@ -6,8 +6,9 @@ suspend  fun <T> catchBlockService(callback : suspend () -> T) : T{
     return try{
         callback()
     }catch (e: Exception) {
+        if(e is FastAiException){
+            throw e
+        }
         throw FastAiException(FastAiException.DATABASE_ERROR_CODE, e.message!!)
-    }catch (e: FastAiException) {
-        throw e
     }
 }

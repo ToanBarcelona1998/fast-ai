@@ -25,6 +25,8 @@ object ApplicationConfig {
     private val S3_REGION = "S3_REGION"
     private val S3_BUCKET_NAME = "S3_BUCKET_NAME"
     private val SMTP_EMAIL = "SMTP_EMAIL"
+    private val SMTP_HOST = "SMTP_HOST"
+    private val SMTP_PORT = "SMTP_PORT"
 
     private val dotenv = Dotenv.configure().filename(".env.${environment.config}").load()
 
@@ -83,5 +85,15 @@ object ApplicationConfig {
 
     fun getSmtpEmail() : String{
         return System.getenv(SMTP_EMAIL) ?: dotenv[SMTP_EMAIL]
+    }
+
+    fun getSmtpHost() : String{
+        return System.getenv(SMTP_HOST) ?: dotenv[SMTP_HOST]
+    }
+
+    fun getSmtpPort() : Int{
+        val port =  System.getenv(SMTP_PORT) ?: dotenv[SMTP_PORT]
+
+        return port.toInt()
     }
 }

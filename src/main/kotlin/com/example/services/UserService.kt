@@ -60,7 +60,9 @@ class UserService(private val userRepository: IUserRepository, private val fastA
                 FastAiException.USER_NOT_FOUND_ERROR_MESSAGE
             )
 
-            GetUserResponse(user.checkStatus())
+            val verifiedUser = user.checkStatus()
+
+            GetUserResponse(verifiedUser)
         }
     }
 

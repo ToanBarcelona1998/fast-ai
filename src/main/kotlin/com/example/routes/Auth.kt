@@ -71,6 +71,8 @@ fun Route.authRoutes(authService: AuthService) {
 
         authenticate("onboarding-auth") {
             post("/register/verify-email") {
+                val userId = call.claimId()
+
                 val formData = call.receiveParameters()
 
                 val otpCode = formData["otp"]
@@ -78,7 +80,7 @@ fun Route.authRoutes(authService: AuthService) {
                 val email = formData["email"]
 
                 try {
-                    val status = authService.registerVerifyEmail(otpCode, email)
+                    val status = authService.registerVerifyEmail(userId,otpCode, email)
 
                     call.parseDataToRespond(status)
                 } catch (e: Exception) {

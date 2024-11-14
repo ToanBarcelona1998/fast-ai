@@ -1,6 +1,7 @@
 package com.example.application.plugins
 
 import com.example.application.config.JWTConfig
+import com.example.domain.exceptions.FastAiException
 import com.example.services.UserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -43,6 +44,10 @@ fun Application.configureSecurity() {
                         userService.getUserById(id)
                         return@validate JWTPrincipal(jwtCredential.payload)
                     } catch (e: Exception) {
+                        if(e is FastAiException && (e.code == FastAiException.USER_ON_BOARDING_STATUS_ERROR_CODE || e.code == FastAiException.USER_ON_WATING_VERIFY_ERROR_CODE)){
+                            return@validate JWTPrincipal(jwtCredential.payload)
+                        }
+
                         return@validate null
                     }
                 }
