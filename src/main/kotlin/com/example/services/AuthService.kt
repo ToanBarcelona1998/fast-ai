@@ -106,39 +106,40 @@ final class AuthService(
                 )
             }
 
-            val storageOtp = otpStorage[email]
+            val storageOtp = otpStorage[email] ?: throw FastAiException(
+                FastAiException.OTP_IN_CORRECT_ERROR_CODE,
+                FastAiException.OTP_IN_CORRECT_ERROR_MESSAGE
+            )
 
-            if (storageOtp != null) {
-                val (otp, timeStamp) = storageOtp
+            val (otp, timeStamp) = storageOtp
 
-
-                if (otp == otpCode) {
-                    val isExpired = (System.currentTimeMillis() - timeStamp) > 15 * 60 * 1000
-
-                    if (isExpired) {
-                        throw FastAiException(
-                            FastAiException.OTP_EXPIRED_ERROR_CODE,
-                            FastAiException.OTP_EXPIRED_ERROR_MESSAGE
-                        )
-                    } else {
-                        userService.update(
-                            id = userId,
-                            status = 1,
-                            gender = null,
-                            address = null,
-                            birthday = null,
-                            phoneNumber = null,
-                            avatar = null,
-                            userName = null
-                        )
-                    }
-                } else {
-                    throw FastAiException(
-                        FastAiException.OTP_IN_CORRECT_ERROR_CODE,
-                        FastAiException.OTP_IN_CORRECT_ERROR_MESSAGE
-                    )
-                }
+            // Check if OTP is correct
+            if (otp != otpCode) {
+                throw FastAiException(
+                    FastAiException.OTP_IN_CORRECT_ERROR_CODE,
+                    FastAiException.OTP_IN_CORRECT_ERROR_MESSAGE
+                )
             }
+
+            // Check if OTP is expired
+            val isExpired = (System.currentTimeMillis() - timeStamp) > 15 * 60 * 1000
+            if (isExpired) {
+                throw FastAiException(
+                    FastAiException.OTP_EXPIRED_ERROR_CODE,
+                    FastAiException.OTP_EXPIRED_ERROR_MESSAGE
+                )
+            }
+
+            userService.update(
+                id = userId,
+                status = 1,
+                gender = null,
+                address = null,
+                birthday = null,
+                phoneNumber = null,
+                avatar = null,
+                userName = null
+            )
         }
     }
 
