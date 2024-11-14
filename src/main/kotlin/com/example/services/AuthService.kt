@@ -93,7 +93,7 @@ final class AuthService(
         }
     }
 
-    suspend fun registerVerifyEmail(otpCode: String?, email: String?) {
+    suspend fun registerVerifyEmail(userId: Int?,otpCode: String?, email: String?) {
         return catchBlockService {
             if (otpCode.isNullOrEmpty()) {
                 throw FastAiException(FastAiException.MISSING_OTP_ERROR_CODE, FastAiException.MISSING_OTP_ERROR_MESSAGE)
@@ -121,12 +121,8 @@ final class AuthService(
                             FastAiException.OTP_EXPIRED_ERROR_MESSAGE
                         )
                     } else {
-                        val account = accountService.getAccountByEmail(email)
-
-                        val user = userService.getUserByAccountId(account.id)
-
                         userService.update(
-                            id = user.id,
+                            id = userId,
                             status = 1,
                             gender = null,
                             address = null,
