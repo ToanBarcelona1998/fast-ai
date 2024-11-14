@@ -93,7 +93,7 @@ final class AuthService(
         }
     }
 
-    suspend fun registerVerifyEmail(userId: Int?,otpCode: String?, email: String?) {
+    suspend fun registerVerifyEmail(userId: Int?,otpCode: String?, email: String?) : Boolean {
         return catchBlockService {
             if (otpCode.isNullOrEmpty()) {
                 throw FastAiException(FastAiException.MISSING_OTP_ERROR_CODE, FastAiException.MISSING_OTP_ERROR_MESSAGE)
