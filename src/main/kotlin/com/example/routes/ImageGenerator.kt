@@ -28,7 +28,7 @@ fun Route.imageGeneratorRoutes(userService: UserService) {
                         seedImage = formData["seed_image"],
                         maskImage = formData["mask_image"],
                         steps = formData["steps"]?.toInt(),
-                        clipSkip = formData["steps"]?.toInt()
+                        clipSkip = formData["clipSkip"]?.toInt()
                     )
                     call.parseDataToRespond(response)
                 } catch (e: Exception) {

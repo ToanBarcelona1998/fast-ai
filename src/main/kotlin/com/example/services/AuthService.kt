@@ -191,6 +191,7 @@ final class AuthService(
         birthday: String?,
     ) : Boolean {
         return catchBlockService {
+            // Maybe validate user status if current status equal 2. It throws an exception
             userService.update(id,userName, gender, phoneNumber, avatar, address, birthday, 2)
         }
     }
