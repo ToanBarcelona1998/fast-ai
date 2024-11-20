@@ -23,7 +23,7 @@ fun Route.imageGeneratorRoutes(userService: UserService) {
                         positivePrompt = formData["prompt"],
                         negativePrompt = formData["negativePrompt"],
                         number = formData["number"]?.toInt(),
-                        CFGScale = formData["CFGScale"]?.toInt(),
+                        CFGScale = formData["CFGScale"]?.toFloat(),
                         strength = formData["strength"]?.toFloat(),
                         seedImage = formData["seed_image"],
                         maskImage = formData["mask_image"],

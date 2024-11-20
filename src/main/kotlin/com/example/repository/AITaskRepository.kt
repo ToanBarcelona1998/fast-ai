@@ -64,6 +64,7 @@ final class AITaskRepository : IAITaskRepository {
                 it[userId] = request.userId
                 it[rawData] = request.rawData
                 it[taskType] = request.taskType
+                it[data] = request.data
             }[AITaskTable.id]
 
             AITask(

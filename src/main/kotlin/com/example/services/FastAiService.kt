@@ -55,7 +55,7 @@ class FastAiService(
         //
         //When using your own models you can specify a new default value for the number of steps.
         steps: Int?,
-        CFGScale : Int?,
+        CFGScale : Float?,
         clipSkip : Int?,
         //When doing Image-to-Image, in painting or out painting, this parameter is used to determine the influence of the seedImage image in the generated output.
         // A higher value results in more influence from the original image, while a lower value allows more creative deviation.
@@ -76,7 +76,7 @@ class FastAiService(
                 height = height ?: defaultHeight,
                 numberResults = number ?: 1,
                 negativePrompt = negativePrompt,
-                CFGScale = CFGScale ?: 7,
+                CFGScale = CFGScale ?: 7f,
                 seedImage = seedImage,
                 maskImage = maskImage,
                 steps = steps ?: 20,
@@ -110,7 +110,7 @@ class FastAiService(
 
                 val addImageResponse = taskService.add(
                     userId = userId,
-                    data = url.replaceBefore("/", ""),
+                    data = url.substringAfterLast("/"),
                     rawData = rawData.toString(),
                     taskType = ETaskType.INFERENCE.type
                 )

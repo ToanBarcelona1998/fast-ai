@@ -126,7 +126,7 @@ class UserService(private val userRepository: IUserRepository, private val fastA
         maskImage :String?,
         steps: Int?,
         strength: Float?,
-        CFGScale: Int?,
+        CFGScale: Float?,
         clipSkip: Int?,
     ): FastAIResponse {
         return fastAiService.generateImages(

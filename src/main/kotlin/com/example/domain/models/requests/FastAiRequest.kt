@@ -67,7 +67,7 @@ data class ImageTaskRequest(
     val steps: Int = 20,
     val scheduler: String? = null,
     val seed: Double? = null,
-    val CFGScale: Int = 7,
+    val CFGScale: Float = 7f,
     val clipSkip: Int = 0,
     val usePromptWeighting: Boolean = false,
     val numberResults: Int = 1,
