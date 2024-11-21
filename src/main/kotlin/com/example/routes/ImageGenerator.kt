@@ -4,9 +4,13 @@ import com.example.services.UserService
 import com.example.utils.claimId
 import com.example.utils.parseDataToRespond
 import com.example.utils.parseErrorToRespond
+import io.ktor.http.content.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.*
+import kotlinx.io.readByteArray
+import java.util.Base64
 
 fun Route.imageGeneratorRoutes(userService: UserService) {
     route("/image-generator") {
@@ -39,7 +43,28 @@ fun Route.imageGeneratorRoutes(userService: UserService) {
             post("/remove-background") {
                 try {
                     val userId = call.claimId()
-                    val inputImage = call.receiveParameters()["image"]
+                    val parts = call.receiveMultipart(1024 * 1024 * 10)
+
+                    var inputImage : String? = null
+
+                    parts.forEachPart { part ->
+                        when(part) {
+                            is PartData.FileItem -> {
+                                if(part.name == "file"){
+                                    val fileBytes = part.provider().readRemaining().readByteArray()
+
+                                    inputImage = Base64.getEncoder().encodeToString(fileBytes)
+
+                                    return@forEachPart
+                                }
+                            }
+                            else -> {
+
+                            }
+                        }
+                        part.dispose()
+                    }
+
                     val response = userService.removeBackgroundImage(userId = userId, inputImage = inputImage)
                     call.parseDataToRespond(response)
                 } catch (e: Exception) {

@@ -11,7 +11,7 @@ class UploadService (private val awsS3Client: AwsS3Client){
     suspend fun uploadFile(file : File,contentType : String  ,folder : String) : UploadFileResponse{
         return catchBlockService {
             // Limit to 10 MB
-            if(file.length() > 10 * 1024 * 104){
+            if(file.length() > 10 * 1024 * 1024){
                 throw FastAiException(FastAiException.UPLOAD_FILE_TOO_LARGE_ERROR_CODE, FastAiException.UPLOAD_FILE_TOO_LARGE_ERROR_MESSAGE)
             }
 
