@@ -75,11 +75,37 @@ fun Route.imageGeneratorRoutes(userService: UserService) {
             post("/upscale") {
                 try {
                     val userId = call.claimId()
-                    val formData = call.receiveParameters()
+                    val parts = call.receiveMultipart(1024 * 1024 * 10)
+
+                    var inputImage : String? = null
+                    var scaleFactor : Int ? = null
+
+                    parts.forEachPart { part ->
+                        when(part) {
+                            is PartData.FileItem -> {
+                                if(part.name == "file"){
+                                    val fileBytes = part.provider().readRemaining().readByteArray()
+
+                                    inputImage = Base64.getEncoder().encodeToString(fileBytes)
+
+                                    return@forEachPart
+                                }
+                            }
+                            is PartData.FormItem -> {
+                                if(part.name =="scaleFactor"){
+                                    scaleFactor = part.value.toInt()
+                                }
+                            }
+                            else -> {
+
+                            }
+                        }
+                        part.dispose()
+                    }
                     val response = userService.upscaleImage(
                         userId = userId,
-                        inputImage = formData["image"],
-                        scaleFactor = formData["scaleFactor"]?.toInt()
+                        inputImage = inputImage,
+                        scaleFactor = scaleFactor
                     )
                     call.parseDataToRespond(response)
                 } catch (e: Exception) {
@@ -107,7 +133,30 @@ fun Route.imageGeneratorRoutes(userService: UserService) {
             post("/image-to-text") {
                 try {
                     val userId = call.claimId()
-                    val response = userService.imageToText(userId = userId, inputImage = call.receiveParameters()["input_image"])
+
+                    val parts = call.receiveMultipart(1024 * 1024 * 10)
+
+                    var inputImage : String? = null
+
+                    parts.forEachPart { part ->
+                        when(part) {
+                            is PartData.FileItem -> {
+                                if(part.name == "file"){
+                                    val fileBytes = part.provider().readRemaining().readByteArray()
+
+                                    inputImage = Base64.getEncoder().encodeToString(fileBytes)
+
+                                    return@forEachPart
+                                }
+                            }
+                            else -> {
+
+                            }
+                        }
+                        part.dispose()
+                    }
+
+                    val response = userService.imageToText(userId = userId, inputImage = inputImage)
                     call.parseDataToRespond(response)
                 } catch (e: Exception) {
                     call.parseErrorToRespond(e)
