@@ -8,7 +8,6 @@ data class FastAIImage(
     val imageUUID: String,
     val taskUUID : String,
     val imageBase64Data: String,
-    val NSFWContent: Boolean?
 )
 
 @Serializable
