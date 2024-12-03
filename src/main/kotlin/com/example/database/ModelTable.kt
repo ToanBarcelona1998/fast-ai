@@ -12,6 +12,7 @@ object ModelTable : Table("ai_models"){
     val detail = varchar("model_detail", 100).nullable()
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at").nullable()
+    val defaultNegativePrompt = varchar("default_negative_prompt" , 2048).nullable()
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
