@@ -21,6 +21,7 @@ final class ModelRepository : IModelRepository {
                 it[type] = request.type
                 it[thumbnail] = request.thumbnail
                 it[createdAt] = now
+                it[defaultNegativePrompt] = request.defaultNegativePrompt
             }[ModelTable.id]
 
             Model(
@@ -31,7 +32,8 @@ final class ModelRepository : IModelRepository {
                 thumbnail = request.thumbnail,
                 detail = request.detail,
                 createdAt = now.toString(),
-                updatedAt = null
+                updatedAt = null,
+                defaultNegativePrompt = request.defaultNegativePrompt,
             )
         }
     }
@@ -47,7 +49,8 @@ final class ModelRepository : IModelRepository {
                     thumbnail = it[ModelTable.thumbnail],
                     detail = it[ModelTable.detail],
                     createdAt = it[ModelTable.createdAt].toString(),
-                    updatedAt = it[ModelTable.updatedAt]?.toString()
+                    updatedAt = it[ModelTable.updatedAt]?.toString(),
+                    defaultNegativePrompt = it[ModelTable.defaultNegativePrompt],
                 )
             }
         }
@@ -68,7 +71,8 @@ final class ModelRepository : IModelRepository {
                     thumbnail = it[ModelTable.thumbnail],
                     detail = it[ModelTable.detail],
                     createdAt = it[ModelTable.createdAt].toString(),
-                    updatedAt = it[ModelTable.updatedAt]?.toString()
+                    updatedAt = it[ModelTable.updatedAt]?.toString(),
+                    defaultNegativePrompt = it[ModelTable.defaultNegativePrompt],
                 )
             }.firstOrNull()
         }

@@ -10,5 +10,6 @@ data class Model(
     val thumbnail: String,
     val detail: String?,
     val createdAt: String,
-    val updatedAt: String?
+    val updatedAt: String?,
+    val defaultNegativePrompt : String?
 )

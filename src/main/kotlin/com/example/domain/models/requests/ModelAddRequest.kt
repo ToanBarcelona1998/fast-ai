@@ -5,5 +5,6 @@ class ModelAddRequest(
     val type: String,
     val tags: String,
     val thumbnail: String,
-    val detail: String?
+    val detail: String?,
+    val defaultNegativePrompt: String?,
 )

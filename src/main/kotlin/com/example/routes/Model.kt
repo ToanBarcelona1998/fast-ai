@@ -19,8 +19,9 @@ fun Route.modelRoute(modelService: ModelService){
                     val detail = formData["detail"]
                     val type = formData["type"]
                     val thumbnail = formData["thumbnail"]
+                    val defaultNegativePrompt = formData["default_negative_prompt"]
 
-                    val response = modelService.add(model = model, tags = tags , detail = detail , type = type , thumbnail = thumbnail )
+                    val response = modelService.add(model = model, tags = tags , detail = detail , type = type , thumbnail = thumbnail , defaultNegativePrompt = defaultNegativePrompt )
 
                     call.parseDataToRespond(response)
                 }catch (e : Exception){

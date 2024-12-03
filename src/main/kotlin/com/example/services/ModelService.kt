@@ -9,7 +9,7 @@ import com.example.repository.interfaces.IModelRepository
 import com.example.utils.catchBlockService
 
 class ModelService(private val modelRepository: IModelRepository){
-    suspend fun add(model: String?, tags: String?, type: String?, detail: String?, thumbnail: String?): CreateModelResponse {
+    suspend fun add(model: String?, tags: String?, type: String?, detail: String?, thumbnail: String?, defaultNegativePrompt : String?): CreateModelResponse {
         return catchBlockService {
 
             if (model.isNullOrEmpty()) {
@@ -29,7 +29,7 @@ class ModelService(private val modelRepository: IModelRepository){
             }
 
             val request =
-                ModelAddRequest(model = model, tags = tags, type = type, detail = detail, thumbnail = thumbnail)
+                ModelAddRequest(model = model, tags = tags, type = type, detail = detail, thumbnail = thumbnail, defaultNegativePrompt = defaultNegativePrompt)
 
             val aiModel =  modelRepository.add(request)
 
